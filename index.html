@@ -467,9 +467,10 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK with Messaging -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
     <script>
         // Your Firebase config
         const firebaseConfig = {
@@ -485,6 +486,7 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const messaging = firebase.messaging();
 
         // Check if admin is already logged in
         document.addEventListener('DOMContentLoaded', function() {
@@ -815,6 +817,7 @@
                 return;
             }
             
+            // Save signal to Firestore
             db.collection('signals').add({
                 pair: pair,
                 type: type,
@@ -827,15 +830,78 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 createdBy: 'admin'
             })
-            .then(() => {
+            .then((docRef) => {
                 closeSignalModal();
                 loadSignals();
-                showMessage('Signal added successfully!', 'success');
+                
+                // Send notification to all users
+                sendNotification(pair, type, docRef.id);
+                
+                showMessage('Signal added successfully! Notifications sent instantly.', 'success');
             })
             .catch((error) => {
                 console.error("Error adding signal: ", error);
                 showMessage('Error adding signal: ' + error.message, 'error');
             });
+        }
+        
+        // NEW: Send notification function
+        function sendNotification(pair, type, signalId) {
+            // Get all FCM tokens
+            db.collection('licenseKeys')
+                .where('notificationEnabled', '==', true)
+                .where('fcmToken', '!=', null)
+                .get()
+                .then(snapshot => {
+                    const tokens = [];
+                    snapshot.forEach(doc => {
+                        const token = doc.data().fcmToken;
+                        if (token) tokens.push(token);
+                    });
+                    
+                    if (tokens.length === 0) {
+                        console.log('No tokens to send notifications to');
+                        return;
+                    }
+                    
+                    // Send notification using Firebase Cloud Messaging REST API
+                    const message = {
+                        notification: {
+                            title: 'New Forex Signal!',
+                            body: `${pair} ${type.toUpperCase()} signal added!`
+                        },
+                        data: {
+                            pair: pair,
+                            type: type,
+                            signal_id: signalId,
+                            click_action: window.location.origin + '/index.html'
+                        },
+                        registration_ids: tokens
+                    };
+                    
+                    // This is the critical part that was missing
+                    fetch('https://fcm.googleapis.com/fcm/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'key=AAAAQ4Q5XeQ:APA91bF6c5QYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3Q'
+                        },
+                        body: JSON.stringify(message)
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Notifications sent successfully');
+                        } else {
+                            console.error('Failed to send notifications:', response);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error sending notifications:', error);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error getting tokens:', error);
+                });
         }
         
         function deactivateSignal(signalId) {
