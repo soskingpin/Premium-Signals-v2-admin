@@ -1,33 +1,41 @@
 // firebase-messaging-sw.js
-importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js');
+// This file MUST be in your root directory (same level as index.html)
+console.log('Service worker loaded');
 
-firebase.initializeApp({
-  apiKey: "AIzaSyA6A67d0YBJlhcT9GUGRVHMzGue1BM2rsA",
-  authDomain: "forex-signals-platform.firebaseapp.com",
-  projectId: "forex-signals-platform",
-  storageBucket: "forex-signals-platform.firebasestorage.app",
-  messagingSenderId: "655334374318",
-  appId: "1:655334374318:web:d107dbf37ab1e31e1c663f",
-  measurementId: "G-P7RWPEPQ4V"
+// This is required for Firebase Messaging
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then(windowClients => {
+      for (var i = 0; i < windowClients.length; i++) {
+        var client = windowClients[i];
+        if (client.url === '/' && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow('/');
+      }
+    })
+  );
 });
 
-const messaging = firebase.messaging();
-
-// Handle background messages
-messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+// This handles background notifications
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push Received');
   
-  const notificationTitle = payload.notification ? payload.notification.title : 'New Forex Signal!';
-  const notificationOptions = {
-    body: payload.notification ? payload.notification.body : payload.data.body,
+  const data = event.data.json();
+  const title = data.notification ? data.notification.title : 'New Forex Signal!';
+  const options = {
+    body: data.notification ? data.notification.body : data.data.body,
     icon: 'https://i.imgur.com/ROu3.png',
     badge: 'https://i.imgur.com/ROu3.png',
     data: {
-      click_action: payload.data.click_action || window.location.href,
-      signal_id: payload.data.signal_id
+      url: self.location.origin
     }
   };
 
-  return self.registration.showNotification(notificationTitle, notificationOptions);
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
 });
