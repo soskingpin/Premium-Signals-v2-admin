@@ -284,33 +284,6 @@
             font-size: 0.85rem;
             color: #aaa;
         }
-        .pricing-info {
-            background: #121423;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-        .pricing-option {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #2d314d;
-        }
-        .original-price {
-            text-decoration: line-through;
-            color: #aaa;
-            margin-left: 8px;
-        }
-        .promotion-tag {
-            background: #ff6b6b;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 5px;
-        }
     </style>
 </head>
 <body>
@@ -337,25 +310,6 @@
         </header>
 
         <div class="dashboard-container">
-            <!-- Pricing info section -->
-            <div class="card">
-                <h2>Current Pricing Structure</h2>
-                <div class="pricing-info">
-                    <div class="pricing-option">
-                        <span>3 Days License</span>
-                        <span>$3 <span class="original-price">$5</span> <span class="promotion-tag">SALE</span></span>
-                    </div>
-                    <div class="pricing-option">
-                        <span>7 Days License</span>
-                        <span>$5 <span class="original-price">$12</span> <span class="promotion-tag">BEST</span></span>
-                    </div>
-                    <div class="pricing-option">
-                        <span>30 Days License</span>
-                        <span>$15 <span class="original-price">$25</span> <span class="promotion-tag">SAVINGS</span></span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="card">
                 <h2>Generate License Key</h2>
                 <div class="key-generator">
@@ -366,18 +320,33 @@
                     
                     <div class="key-row">
                         <select id="durationValue" style="flex: 1;">
-                            <option value="3" data-price="3">3 Days - $3</option>
-                            <option value="7" data-price="5" selected>7 Days - $5</option>
-                            <option value="30" data-price="15">30 Days - $15</option>
-                            <option value="2">2 Minutes - $0.10</option>
-                            <option value="5">5 Minutes - $0.25</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="7" selected>7</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="60">60</option>
+                            <option value="90">90</option>
+                        </select>
+                        
+                        <select id="durationUnit" style="flex: 1;">
+                            <option value="seconds">Seconds</option>
+                            <option value="minutes">Minutes</option>
+                            <option value="hours">Hours</option>
+                            <option value="days" selected>Days</option>
+                            <option value="weeks">Weeks</option>
+                            <option value="months">Months</option>
                         </select>
                         
                         <button onclick="saveKey()" style="flex: 1; padding: 10px 15px;">Activate Key</button>
                     </div>
                     
                     <div class="duration-help">
-                        Current pricing: 3 Days = $3, 7 Days = $5, 30 Days = $15
+                        Tip: For subscriptions, 30 days is common. For trials, 7 days works well.
                     </div>
                     
                     <div id="keyMessage" class="success" style="display: none; margin-top: 10px;"></div>
@@ -559,22 +528,20 @@
                 if ((i + 1) % 4 === 0 && i !== 15) key += '-';
             }
             document.getElementById('newKey').value = key;
-            showMessage('Key generated! Click "Activate Key" to save', 'success');
+            showMessage('Key generated! Select duration and click "Activate Key"', 'success');
         }
 
         function saveKey() {
             const keyInput = document.getElementById('newKey').value;
-            const durationSelect = document.getElementById('durationValue');
-            const durationValue = parseInt(durationSelect.value);
-            const selectedOption = durationSelect.options[durationSelect.selectedIndex];
-            const price = selectedOption.getAttribute('data-price') || '0';
+            const durationValue = parseInt(document.getElementById('durationValue').value);
+            const durationUnit = document.getElementById('durationUnit').value;
             
             if (!keyInput) {
                 showMessage('Generate a key first', 'error');
                 return;
             }
             
-            if (!durationValue) {
+            if (!durationValue || !durationUnit) {
                 showMessage('Please select a valid duration', 'error');
                 return;
             }
@@ -588,12 +555,25 @@
             const now = new Date();
             let expiresAt = new Date(now);
             
-            // Special handling for minutes
-            if (durationValue < 1) {
-                expiresAt.setMinutes(now.getMinutes() + durationValue);
-            } else {
-                // Default to days for values >= 1
-                expiresAt.setDate(now.getDate() + durationValue);
+            switch(durationUnit) {
+                case 'seconds':
+                    expiresAt.setSeconds(now.getSeconds() + durationValue);
+                    break;
+                case 'minutes':
+                    expiresAt.setMinutes(now.getMinutes() + durationValue);
+                    break;
+                case 'hours':
+                    expiresAt.setHours(now.getHours() + durationValue);
+                    break;
+                case 'days':
+                    expiresAt.setDate(now.getDate() + durationValue);
+                    break;
+                case 'weeks':
+                    expiresAt.setDate(now.getDate() + (durationValue * 7));
+                    break;
+                case 'months':
+                    expiresAt.setMonth(now.getMonth() + durationValue);
+                    break;
             }
             
             // Save to Firestore
@@ -604,8 +584,7 @@
                 createdBy: 'admin',
                 expiresAt: firebase.firestore.Timestamp.fromDate(expiresAt),
                 durationValue: durationValue,
-                durationUnit: durationValue < 1 ? 'minutes' : 'days',
-                price: price
+                durationUnit: durationUnit
             })
             .then(() => {
                 document.getElementById('newKey').value = '';
@@ -637,6 +616,109 @@
             });
         }
         
+        function loadAllKeys() {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.background = 'rgba(0,0,0,0.85)';
+            modal.style.zIndex = '2000';
+            modal.style.overflow = 'auto';
+            
+            const content = document.createElement('div');
+            content.style.background = '#151729';
+            content.style.margin = '50px auto';
+            content.style.width = '90%';
+            content.style.maxWidth = '1200px';
+            content.style.borderRadius = '12px';
+            content.style.padding = '20px';
+            content.style.position = 'relative';
+            
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.position = 'absolute';
+            closeBtn.style.top = '15px';
+            closeBtn.style.right = '20px';
+            closeBtn.style.color = '#aaa';
+            closeBtn.style.fontSize = '28px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.style.transition = 'all 0.3s';
+            closeBtn.onmouseover = () => closeBtn.style.color = '#4ecdc4';
+            closeBtn.onclick = () => document.body.removeChild(modal);
+            
+            const title = document.createElement('h2');
+            title.textContent = 'All License Keys';
+            title.style.color = '#4ecdc4';
+            title.style.marginTop = '0';
+            
+            const table = document.createElement('table');
+            table.style.width = '100%';
+            table.style.borderCollapse = 'collapse';
+            table.style.marginTop = '20px';
+            
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th>License Key</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Expires</th>
+                    <th>Actions</th>
+                </tr>
+            `;
+            
+            const tbody = document.createElement('tbody');
+            
+            // Load all keys
+            db.collection('licenseKeys')
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
+                        
+                        let expiresAt = 'N/A';
+                        let statusClass = 'status ' + data.status;
+                        
+                        if (data.expiresAt) {
+                            const expiresDate = data.expiresAt.toDate();
+                            expiresAt = expiresDate.toLocaleString();
+                        }
+                        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${data.key}</td>
+                            <td><span class="${statusClass}">${data.status}</span></td>
+                            <td>${createdAt}</td>
+                            <td>${expiresAt}</td>
+                            <td>
+                                ${data.status === 'active' ? 
+                                    `<button class="action-btn" onclick="revokeKey('${doc.id}')">Revoke</button>` : 
+                                    'Revoked'}
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error loading keys: ", error);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="5" style="color: #ff6b6b; text-align: center;">Error loading keys: ${error.message}</td>`;
+                    tbody.appendChild(row);
+                });
+            
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            content.appendChild(closeBtn);
+            content.appendChild(title);
+            content.appendChild(table);
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+
         function loadRecentKeys() {
             db.collection('licenseKeys')
                 .orderBy('createdAt', 'desc')
@@ -650,7 +732,7 @@
                     querySnapshot.forEach((doc) => {
                         const data = doc.data();
                         if (data.status === 'active') {
-                            activeKeys.push({id: doc.id, data});
+                            activeKeys.push({id: doc.id,  data});
                         }
                     });
                     
