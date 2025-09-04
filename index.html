@@ -19,7 +19,6 @@
             position: relative;
             overflow: hidden;
         }
-        
         .login-container::before {
             content: '';
             position: absolute;
@@ -31,7 +30,6 @@
             z-index: -1;
             pointer-events: none;
         }
-        
         .dashboard-container { display: none; max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         header { 
             background: #151729; 
@@ -301,14 +299,12 @@
         <button onclick="loginAdmin()" style="width: 100%; padding: 12px; margin-top: 10px; font-weight: 600;">Login</button>
         <div id="message" class="error" style="display: none;"></div>
     </div>
-
     <!-- Dashboard Page -->
     <div id="dashboardPage">
         <header>
             <div class="logo">Forex Signals Admin</div>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </header>
-
         <div class="dashboard-container">
             <div class="card">
                 <h2>Generate License Key</h2>
@@ -317,7 +313,6 @@
                         <input type="text" id="newKey" readonly placeholder="Generate a new key">
                         <button onclick="generateKey()" style="padding: 10px 15px; flex: 0 0 auto;">Generate</button>
                     </div>
-                    
                     <div class="key-row">
                         <select id="durationValue" style="flex: 1;">
                             <option value="1">1</option>
@@ -332,7 +327,6 @@
                             <option value="60">60</option>
                             <option value="90">90</option>
                         </select>
-                        
                         <select id="durationUnit" style="flex: 1;">
                             <option value="seconds">Seconds</option>
                             <option value="minutes">Minutes</option>
@@ -341,29 +335,23 @@
                             <option value="weeks">Weeks</option>
                             <option value="months">Months</option>
                         </select>
-                        
                         <button onclick="saveKey()" style="flex: 1; padding: 10px 15px;">Activate Key</button>
                     </div>
-                    
                     <div class="duration-help">
                         Tip: For subscriptions, 30 days is common. For trials, 7 days works well.
                     </div>
-                    
                     <div id="keyMessage" class="success" style="display: none; margin-top: 10px;"></div>
                 </div>
             </div>
-            
             <div class="card">
                 <h2>Add New Signal</h2>
                 <button onclick="openSignalModal()" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #4ecdc4, #1a936f); color: #0f0f1b; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);">
                     + Add New Signal
                 </button>
-                
                 <div class="signal-help">
                     Use this form to add new forex signals for your users.
                 </div>
             </div>
-            
             <div class="card">
                 <div class="key-management-section">
                     <h2>License Keys Management</h2>
@@ -385,7 +373,6 @@
                     </table>
                 </div>
             </div>
-            
             <div class="card">
                 <h2>Active Signals</h2>
                 <table id="signalsTable">
@@ -407,19 +394,16 @@
             </div>
         </div>
     </div>
-    
     <!-- Signal Modal -->
     <div id="signalModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeSignalModal()">&times;</span>
             <h2 style="color: #4ecdc4; margin-top: 0; margin-bottom: 20px;">Add New Signal</h2>
-            
             <div class="signal-generator" style="gap: 15px;">
                 <div class="signal-row">
                     <label style="width: 100px;">Currency Pair:</label>
                     <input type="text" id="signalPair" placeholder="EUR/USD">
                 </div>
-                
                 <div class="signal-row">
                     <label style="width: 100px;">Signal Type:</label>
                     <select id="signalType">
@@ -427,22 +411,18 @@
                         <option value="sell">Sell</option>
                     </select>
                 </div>
-                
                 <div class="signal-row">
                     <label style="width: 100px;">Entry Price:</label>
                     <input type="text" id="signalEntry" placeholder="1.0850">
                 </div>
-                
                 <div class="signal-row">
                     <label style="width: 100px;">Take Profit:</label>
                     <input type="text" id="signalTP" placeholder="1.0920">
                 </div>
-                
                 <div class="signal-row">
                     <label style="width: 100px;">Stop Loss:</label>
                     <input type="text" id="signalSL" placeholder="1.0810">
                 </div>
-                
                 <div class="signal-row">
                     <label style="width: 100px;">Timeframe:</label>
                     <select id="signalTimeframe">
@@ -454,23 +434,19 @@
                         <option value="D1">D1</option>
                     </select>
                 </div>
-                
                 <div class="signal-row">
                     <label style="width: 100px;">Additional Note:</label>
                     <input type="text" id="signalNote" placeholder="Optional note">
                 </div>
-                
                 <button onclick="saveSignal()" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #4ecdc4, #1a936f); color: #0f0f1b; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-weight: 600; box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);">
                     Save Signal
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Firebase SDK with Messaging -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
     <script>
         // Your Firebase config
         const firebaseConfig = {
@@ -482,23 +458,18 @@
             appId: "1:655334374318:web:d107dbf37ab1e31e1c663f",
             measurementId: "G-P7RWPEPQ4V"
         };
-        
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const messaging = firebase.messaging();
-
         // Check if admin is already logged in
         document.addEventListener('DOMContentLoaded', function() {
             if (localStorage.getItem('forex_admin') === 'true') {
                 showDashboard();
             }
         });
-
         function loginAdmin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
             if (username === 'admin' && password === 'admin###') {
                 localStorage.setItem('forex_admin', 'true');
                 showDashboard();
@@ -506,7 +477,6 @@
                 showMessage('Invalid credentials', 'error');
             }
         }
-
         function showDashboard() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
@@ -514,13 +484,11 @@
             loadRecentKeys();
             loadSignals();
         }
-
         function logout() {
             localStorage.removeItem('forex_admin');
             document.getElementById('dashboardPage').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
         }
-
         // Generate random license key
         function generateKey() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -532,31 +500,25 @@
             document.getElementById('newKey').value = key;
             showMessage('Key generated! Select duration and click "Activate Key"', 'success');
         }
-
         function saveKey() {
             const keyInput = document.getElementById('newKey').value;
             const durationValue = parseInt(document.getElementById('durationValue').value);
             const durationUnit = document.getElementById('durationUnit').value;
-            
             if (!keyInput) {
                 showMessage('Generate a key first', 'error');
                 return;
             }
-            
             if (!durationValue || !durationUnit) {
                 showMessage('Please select a valid duration', 'error');
                 return;
             }
-
             const formattedKey = keyInput.replace(/[^A-Z0-9]/gi, '')
                 .replace(/(.{4})/g, '$1-')
                 .slice(0, 19)
                 .toUpperCase();
-
             // Calculate expiration date based on selected duration
             const now = new Date();
             let expiresAt = new Date(now);
-            
             switch(durationUnit) {
                 case 'seconds':
                     expiresAt.setSeconds(now.getSeconds() + durationValue);
@@ -577,7 +539,6 @@
                     expiresAt.setMonth(now.getMonth() + durationValue);
                     break;
             }
-            
             // Save to Firestore
             db.collection('licenseKeys').add({
                 key: formattedKey,
@@ -598,12 +559,10 @@
                 showMessage('Error saving key: ' + error.message, 'error');
             });
         }
-
         function revokeKey(keyId) {
             if (!confirm('Are you sure you want to revoke this license key?')) {
                 return;
             }
-            
             db.collection('licenseKeys').doc(keyId).update({
                 status: 'revoked',
                 revokedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -617,7 +576,6 @@
                 showMessage('Error revoking key: ' + error.message, 'error');
             });
         }
-        
         function loadAllKeys() {
             const modal = document.createElement('div');
             modal.style.position = 'fixed';
@@ -628,7 +586,6 @@
             modal.style.background = 'rgba(0,0,0,0.85)';
             modal.style.zIndex = '2000';
             modal.style.overflow = 'auto';
-            
             const content = document.createElement('div');
             content.style.background = '#151729';
             content.style.margin = '50px auto';
@@ -637,7 +594,6 @@
             content.style.borderRadius = '12px';
             content.style.padding = '20px';
             content.style.position = 'relative';
-            
             const closeBtn = document.createElement('span');
             closeBtn.innerHTML = '&times;';
             closeBtn.style.position = 'absolute';
@@ -649,17 +605,14 @@
             closeBtn.style.transition = 'all 0.3s';
             closeBtn.onmouseover = () => closeBtn.style.color = '#4ecdc4';
             closeBtn.onclick = () => document.body.removeChild(modal);
-            
             const title = document.createElement('h2');
             title.textContent = 'All License Keys';
             title.style.color = '#4ecdc4';
             title.style.marginTop = '0';
-            
             const table = document.createElement('table');
             table.style.width = '100%';
             table.style.borderCollapse = 'collapse';
             table.style.marginTop = '20px';
-            
             const thead = document.createElement('thead');
             thead.innerHTML = `
                 <tr>
@@ -670,9 +623,7 @@
                     <th>Actions</th>
                 </tr>
             `;
-            
             const tbody = document.createElement('tbody');
-            
             // Load all keys
             db.collection('licenseKeys')
                 .orderBy('createdAt', 'desc')
@@ -681,15 +632,12 @@
                     querySnapshot.forEach((doc) => {
                         const data = doc.data();
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
-                        
                         let expiresAt = 'N/A';
                         let statusClass = 'status ' + data.status;
-                        
                         if (data.expiresAt) {
                             const expiresDate = data.expiresAt.toDate();
                             expiresAt = expiresDate.toLocaleString();
                         }
-                        
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${data.key}</td>
@@ -711,7 +659,6 @@
                     row.innerHTML = `<td colspan="5" style="color: #ff6b6b; text-align: center;">Error loading keys: ${error.message}</td>`;
                     tbody.appendChild(row);
                 });
-            
             table.appendChild(thead);
             table.appendChild(tbody);
             content.appendChild(closeBtn);
@@ -720,7 +667,6 @@
             modal.appendChild(content);
             document.body.appendChild(modal);
         }
-
         function loadRecentKeys() {
             db.collection('licenseKeys')
                 .orderBy('createdAt', 'desc')
@@ -728,7 +674,6 @@
                 .then((querySnapshot) => {
                     const tbody = document.querySelector('#keysTable tbody');
                     tbody.innerHTML = '';
-                    
                     // Get only the last 3 active keys
                     const activeKeys = [];
                     querySnapshot.forEach((doc) => {
@@ -737,27 +682,21 @@
                             activeKeys.push({id: doc.id,  data});
                         }
                     });
-                    
                     // Take only the last 3
                     const recentKeys = activeKeys.slice(0, 3);
-                    
                     recentKeys.forEach(item => {
                         const data = item.data;
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
-                        
                         let expiresAt = 'N/A';
                         let statusClass = 'status ' + data.status;
-                        
                         if (data.expiresAt) {
                             const expiresDate = data.expiresAt.toDate();
                             expiresAt = expiresDate.toLocaleString();
-                            
                             // Check if expired
                             if (data.status === 'active' && expiresDate < new Date()) {
                                 statusClass = 'status expired';
                             }
                         }
-                        
                         const row = `
                             <tr>
                                 <td>${data.key}</td>
@@ -771,7 +710,6 @@
                         `;
                         tbody.innerHTML += row;
                     });
-                    
                     // If no active keys, show message
                     if (recentKeys.length === 0) {
                         tbody.innerHTML = `
@@ -787,12 +725,10 @@
                     tbody.innerHTML = `<tr><td colspan="5" style="color: #ff6b6b; text-align: center;">Error loading keys: ${error.message}</td></tr>`;
                 });
         }
-        
         // Signal management functions
         function openSignalModal() {
             document.getElementById('signalModal').style.display = 'flex';
         }
-        
         function closeSignalModal() {
             document.getElementById('signalModal').style.display = 'none';
             // Clear form
@@ -802,7 +738,6 @@
             document.getElementById('signalSL').value = '';
             document.getElementById('signalNote').value = '';
         }
-        
         function saveSignal() {
             const pair = document.getElementById('signalPair').value.trim();
             const type = document.getElementById('signalType').value;
@@ -811,13 +746,10 @@
             const sl = document.getElementById('signalSL').value.trim();
             const timeframe = document.getElementById('signalTimeframe').value;
             const note = document.getElementById('signalNote').value.trim();
-            
             if (!pair || !entry || !tp || !sl) {
                 alert('Please fill in all required fields (Pair, Entry, TP, SL)');
                 return;
             }
-            
-            // Save signal to Firestore
             db.collection('signals').add({
                 pair: pair,
                 type: type,
@@ -830,85 +762,20 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 createdBy: 'admin'
             })
-            .then((docRef) => {
+            .then(() => {
                 closeSignalModal();
                 loadSignals();
-                
-                // Send notification to all users
-                sendNotification(pair, type, docRef.id);
-                
-                showMessage('Signal added successfully! Notifications sent instantly.', 'success');
+                showMessage('Signal added successfully!', 'success');
             })
             .catch((error) => {
                 console.error("Error adding signal: ", error);
                 showMessage('Error adding signal: ' + error.message, 'error');
             });
         }
-        
-        // NEW: Send notification function
-        function sendNotification(pair, type, signalId) {
-            // Get all FCM tokens
-            db.collection('licenseKeys')
-                .where('notificationEnabled', '==', true)
-                .where('fcmToken', '!=', null)
-                .get()
-                .then(snapshot => {
-                    const tokens = [];
-                    snapshot.forEach(doc => {
-                        const token = doc.data().fcmToken;
-                        if (token) tokens.push(token);
-                    });
-                    
-                    if (tokens.length === 0) {
-                        console.log('No tokens to send notifications to');
-                        return;
-                    }
-                    
-                    // Send notification using Firebase Cloud Messaging REST API
-                    const message = {
-                        notification: {
-                            title: 'New Forex Signal!',
-                            body: `${pair} ${type.toUpperCase()} signal added!`
-                        },
-                        data: {
-                            pair: pair,
-                            type: type,
-                            signal_id: signalId,
-                            click_action: window.location.origin + '/index.html'
-                        },
-                        registration_ids: tokens
-                    };
-                    
-                    // This is the critical part that was missing
-                    fetch('https://fcm.googleapis.com/fcm/send', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'key=AAAAQ4Q5XeQ:APA91bF6c5QYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3QZqYqJZjX9XQYcGZJ3Q'
-                        },
-                        body: JSON.stringify(message)
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log('Notifications sent successfully');
-                        } else {
-                            console.error('Failed to send notifications:', response);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error sending notifications:', error);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error getting tokens:', error);
-                });
-        }
-        
         function deactivateSignal(signalId) {
             if (!confirm('Are you sure you want to deactivate this signal?')) {
                 return;
             }
-            
             db.collection('signals').doc(signalId).update({
                 status: 'inactive',
                 deactivatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -922,14 +789,12 @@
                 showMessage('Error deactivating signal: ' + error.message, 'error');
             });
         }
-        
         function loadSignals() {
             db.collection('signals')
                 .get()
                 .then((querySnapshot) => {
                     const tbody = document.querySelector('#signalsTable tbody');
                     tbody.innerHTML = '';
-                    
                     // Filter and sort client-side (no index needed)
                     const activeSignals = [];
                     querySnapshot.forEach(doc => {
@@ -938,15 +803,12 @@
                             activeSignals.push({id: doc.id, ...data});
                         }
                     });
-                    
                     // Sort by createdAt
                     activeSignals.sort((a, b) => {
                         return b.createdAt.seconds - a.createdAt.seconds;
                     });
-                    
                     activeSignals.forEach(data => {
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
-                        
                         const row = `
                             <tr>
                                 <td>${data.pair}</td>
@@ -963,7 +825,6 @@
                         `;
                         tbody.innerHTML += row;
                     });
-                    
                     // If no signals, show message
                     if (activeSignals.length === 0) {
                         tbody.innerHTML = `
@@ -979,15 +840,12 @@
                     tbody.innerHTML = `<tr><td colspan="8" style="color: #ff6b6b; text-align: center;">Error loading signals: ${error.message}</td></tr>`;
                 });
         }
-
         function showMessage(text, type = 'error') {
             const messageDiv = document.getElementById('keyMessage') || document.getElementById('message');
             if (!messageDiv) return;
-            
             messageDiv.textContent = text;
             messageDiv.style.display = 'block';
             messageDiv.className = type;
-            
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
