@@ -3,22 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forex Signals Admin</title>
+    <title>CyberForex Signals | Admin Dashboard</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: all 0.3s ease; }
-        body { background: #0f0f1b; color: #e0e0e0; margin: 0; padding: 0; min-height: 100vh; }
-        .login-container { 
-            width: 100%; 
-            max-width: 400px; 
-            background: #151729; 
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 0 30px rgba(78, 205, 196, 0.2);
-            margin: 50px auto; 
-            border: 1px solid rgba(78, 205, 196, 0.1);
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00ff;
+            --dark: #0a0a15;
+            --darker: #05050a;
+            --accent: #00ff00;
+            --danger: #ff0000;
+            --success: #00ff00;
+            --text: #e0e0e0;
+            --card-bg: #121220;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Elements */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        #candlestick-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.25;
+        }
+
+        /* Card and Layout Styles */
+        .dashboard-container {
+            display: none;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--darker) 0%, #0c0c20 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: var(--border-radius);
+            margin: 0 20px 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 15px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
         }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm25-6c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%2300f0ff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.2;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .status-indicators {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+            text-transform: uppercase;
+        }
+
+        .status-indicator.active {
+            color: var(--success);
+            border-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger), #c0392b);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-header h2 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .key-generator, .signal-generator {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .key-row, .signal-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input, select, button {
+            padding: 12px;
+            border-radius: var(--border-radius);
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        input, select {
+            flex: 1;
+            background: rgba(10, 10, 30, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: white;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+        }
+
+        /* Cyberpunk-styled inputs */
+        .cyber-input {
+            position: relative;
+            background: rgba(10, 10, 30, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .cyber-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+        }
+
+        .cyber-select {
+            position: relative;
+            background: rgba(10, 10, 30, 0.5);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .cyber-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+        }
+
+        .cyber-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #0f0f1b;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3);
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .cyber-button:active {
+            transform: translateY(0);
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(50, 50, 80, 0.5);
+            border-right: 1px solid rgba(50, 50, 80, 0.5);
+        }
+
+        th:last-child, td:last-child {
+            border-right: none;
+        }
+
+        th {
+            background: rgba(15, 15, 35, 0.7);
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .status.active {
+            background: rgba(0, 255, 0, 0.2);
+            color: var(--success);
+        }
+
+        .status.expired {
+            background: rgba(255, 0, 0, 0.2);
+            color: var(--danger);
+        }
+
+        .status.revoked {
+            background: rgba(108, 117, 125, 0.2);
+            color: #6c757d;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            margin-right: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .key-help, .signal-help {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .message.success {
+            color: var(--success);
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .message.error {
+            color: var(--danger);
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: modalFadeIn 0.4s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            margin: 10% auto;
+            padding: 25px;
+            width: 550px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            margin: 50px auto;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+
+        .login-header .tagline {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
         .login-container::before {
             content: '';
             position: absolute;
@@ -26,295 +494,128 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(78, 205, 196, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
             z-index: -1;
             pointer-events: none;
         }
-        .dashboard-container { display: none; max-width: 1200px; margin: 20px auto; padding: 0 20px; }
-        header { 
-            background: #151729; 
-            padding: 15px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            border-radius: 10px;
-            margin: 0 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 1px solid rgba(78, 205, 196, 0.1);
-        }
-        .logo { 
-            color: #4ecdc4; 
-            font-size: 1.5rem; 
-            font-weight: bold; 
-            text-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
-        }
-        .logout-btn { 
-            background: linear-gradient(45deg, #ff6b6b, #c0392b); 
-            color: white; 
-            border: none; 
-            padding: 8px 15px; 
-            border-radius: 6px; 
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-        }
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 15px rgba(255, 107, 107, 0.4);
-        }
-        .card { 
-            background: #151729; 
-            border-radius: 12px; 
-            padding: 20px; 
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 1px solid rgba(78, 205, 196, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, #4ecdc4, #1a936f);
-        }
-        h2 { 
-            color: #4ecdc4; 
-            margin-top: 0; 
-            font-weight: 600;
-            text-shadow: 0 0 5px rgba(78, 205, 196, 0.2);
-        }
-        .key-generator, .signal-generator { display: flex; flex-direction: column; gap: 15px; }
-        .key-row, .signal-row { display: flex; gap: 10px; align-items: center; }
-        input, select, button { padding: 10px; border-radius: 6px; }
-        input, select { 
-            flex: 1; 
-            background: #121423; 
-            border: 1px solid #2d314d; 
-            color: white; 
-            transition: all 0.3s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #4ecdc4;
-            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
-        }
-        button { 
-            background: linear-gradient(45deg, #4ecdc4, #1a936f); 
-            color: #0f0f1b; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold; 
-            box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);
-            transition: all 0.3s;
-        }
-        button:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 7px 15px rgba(78, 205, 196, 0.4);
-        }
-        button:active {
-            transform: translateY(0);
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        th, td { 
-            padding: 12px 15px; 
-            text-align: left; 
-            border-bottom: 1px solid #2d314d; 
-            border-right: 1px solid #2d314d;
-        }
-        th:last-child, td:last-child {
-            border-right: none;
-        }
-        th { 
-            background: #121423; 
-            color: #4ecdc4; 
-            font-weight: 600;
-        }
-        tr:hover { 
-            background: rgba(78, 205, 196, 0.05); 
-        }
-        .status { 
-            padding: 5px 10px; 
-            border-radius: 20px; 
-            font-size: 0.85rem; 
-            display: inline-block;
-        }
-        .status.active { 
-            background: rgba(46, 204, 113, 0.2); 
-            color: #2ecc71; 
-        }
-        .status.expired { 
-            background: rgba(231, 76, 60, 0.2); 
-            color: #e74c3c; 
-        }
-        .status.revoked { 
-            background: rgba(108, 117, 125, 0.2); 
-            color: #6c757d; 
-        }
-        .action-btn { 
-            background: none; 
-            border: none; 
-            color: #4ecdc4; 
-            cursor: pointer; 
-            margin-right: 5px; 
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        .action-btn:hover {
-            color: #1a936f;
-            text-decoration: underline;
-        }
-        .duration-help, .signal-help { 
-            font-size: 0.85rem; 
-            color: #aaa; 
-            margin-top: 5px; 
-        }
-        .error { 
-            color: #ff6b6b; 
-            text-align: center; 
-            margin-top: 15px; 
-        }
-        .success { 
-            color: #4ecdc4; 
-            text-align: center; 
-            margin-top: 15px; 
-        }
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0,0,0,0.85); 
-            z-index: 1000; 
-            justify-content: center;
-            align-items: center;
-            animation: modalFadeIn 0.4s;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .modal-content { 
-            background: #151729; 
-            margin: 10% auto; 
-            padding: 20px; 
-            width: 500px; 
-            border-radius: 12px;
-            border: 1px solid rgba(78, 205, 196, 0.1);
-            box-shadow: 0 0 50px rgba(78, 205, 196, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        .modal-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(to bottom, #4ecdc4, #1a936f);
-        }
-        .close { 
-            color: #aaa; 
-            float: right; 
-            font-size: 28px; 
-            font-weight: bold; 
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .close:hover { 
-            color: #4ecdc4; 
-            transform: scale(1.1);
-        }
-        .license-keys-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .view-all-btn {
-            background: none;
-            border: none;
-            color: #4ecdc4;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        .view-all-btn:hover {
-            color: #1a936f;
-            text-decoration: underline;
-        }
-        .recent-keys-only {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .recent-keys-only::-webkit-scrollbar {
-            width: 6px;
-        }
-        .recent-keys-only::-webkit-scrollbar-track {
-            background: #121423;
-            border-radius: 3px;
-        }
-        .recent-keys-only::-webkit-scrollbar-thumb {
-            background: #4ecdc4;
-            border-radius: 3px;
-        }
-        .key-management-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        .form-group {
+            width: 100%;
             margin-bottom: 15px;
         }
-        .key-limit-info {
-            font-size: 0.85rem;
-            color: #aaa;
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .error-message {
+            color: var(--danger);
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            min-height: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .key-row, .signal-row {
+                flex-direction: column;
+            }
+            
+            .login-container {
+                margin: 20px 15px;
+            }
+        }
+
+        /* Glowing elements for cyberpunk look */
+        .glow {
+            text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
+        }
+
+        .glow-hover:hover {
+            text-shadow: 0 0 8px var(--primary), 0 0 15px var(--primary);
+        }
+
+        /* Professional chart styles */
+        .chart-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .chart-grid-line {
+            position: absolute;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .horizontal-grid {
+            width: 100%;
+            height: 1px;
+        }
+
+        .vertical-grid {
+            height: 100%;
+            width: 1px;
         }
     </style>
 </head>
 <body>
+    <!-- Dynamic Background Elements -->
+    <div class="background">
+        <canvas id="candlestick-canvas"></canvas>
+    </div>
+
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
-        <h2 style="text-align: center; color: #4ecdc4; margin-bottom: 30px; font-weight: 700;">Admin Login</h2>
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="admin">
+        <div class="login-header">
+            <h1>CYBERFOREX</h1>
+            <p class="tagline">ADMIN DASHBOARD</p>
         </div>
         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="••••••••">
+            <label for="username">ACCESS CODE</label>
+            <input type="text" id="username" placeholder="admin" class="cyber-input">
         </div>
-        <button onclick="loginAdmin()" style="width: 100%; padding: 12px; margin-top: 10px; font-weight: 600;">Login</button>
-        <div id="message" class="error" style="display: none;"></div>
+        <div class="form-group">
+            <label for="password">AUTHENTICATION</label>
+            <input type="password" id="password" placeholder="••••••••" class="cyber-input">
+        </div>
+        <button onclick="loginAdmin()" class="cyber-button">LOG IN</button>
+        <div id="message" class="error-message"></div>
     </div>
+
     <!-- Dashboard Page -->
-    <div id="dashboardPage">
+    <div id="dashboardPage" class="dashboard-container">
         <header>
-            <div class="logo">Forex Signals Admin</div>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+            <div class="logo">CYBERFOREX ADMIN DASHBOARD</div>
+            <div class="status-indicators">
+                <div class="status-indicator active">SECURE</div>
+                <button class="logout-btn" onclick="logout()">LOG OUT</button>
+            </div>
         </header>
-        <div class="dashboard-container">
+        
+        <div class="main-content">
             <div class="card">
-                <h2>Generate License Key</h2>
+                <div class="card-header">
+                    <h2>GENERATE LICENSE KEY</h2>
+                    <div class="card-stats">
+                        <span class="stat">ACTIVE KEYS: <span id="activeKeysCount">0</span></span>
+                    </div>
+                </div>
                 <div class="key-generator">
                     <div class="key-row">
-                        <input type="text" id="newKey" readonly placeholder="Generate a new key">
-                        <button onclick="generateKey()" style="padding: 10px 15px; flex: 0 0 auto;">Generate</button>
+                        <input type="text" id="newKey" readonly class="cyber-input" placeholder="Generate a new key">
+                        <button onclick="generateKey()" class="cyber-button">GENERATE</button>
                     </div>
                     <div class="key-row">
-                        <select id="durationValue" style="flex: 1;">
+                        <select id="durationValue" class="cyber-select">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -327,7 +628,7 @@
                             <option value="60">60</option>
                             <option value="90">90</option>
                         </select>
-                        <select id="durationUnit" style="flex: 1;">
+                        <select id="durationUnit" class="cyber-select">
                             <option value="seconds">Seconds</option>
                             <option value="minutes">Minutes</option>
                             <option value="hours">Hours</option>
@@ -335,37 +636,43 @@
                             <option value="weeks">Weeks</option>
                             <option value="months">Months</option>
                         </select>
-                        <button onclick="saveKey()" style="flex: 1; padding: 10px 15px;">Activate Key</button>
+                        <button onclick="saveKey()" class="cyber-button">ACTIVATE KEY</button>
                     </div>
-                    <div class="duration-help">
-                        Tip: For subscriptions, 30 days is common. For trials, 7 days works well.
+                    <div class="key-help">
+                        <p>TIP: For subscriptions, 30 days is common. For trials, 7 days works well.</p>
                     </div>
-                    <div id="keyMessage" class="success" style="display: none; margin-top: 10px;"></div>
+                    <div id="keyMessage" class="message"></div>
                 </div>
             </div>
+
             <div class="card">
-                <h2>Add New Signal</h2>
-                <button onclick="openSignalModal()" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #4ecdc4, #1a936f); color: #0f0f1b; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 20px; font-weight: 600; box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);">
-                    + Add New Signal
-                </button>
+                <div class="card-header">
+                    <h2>ADD NEW SIGNAL</h2>
+                    <button onclick="openSignalModal()" class="cyber-button">
+                        + ADD NEW SIGNAL
+                    </button>
+                </div>
                 <div class="signal-help">
-                    Use this form to add new forex signals for your users.
+                    <p>Use this form to add new forex signals for your users.</p>
                 </div>
             </div>
+
             <div class="card">
-                <div class="key-management-section">
-                    <h2>License Keys Management</h2>
-                    <span class="key-limit-info">Showing last 3 active keys</span>
+                <div class="card-header">
+                    <h2>LICENSE KEYS MANAGEMENT</h2>
+                    <div class="card-stats">
+                        <span class="stat">LAST 3 ACTIVE</span>
+                    </div>
                 </div>
                 <div class="recent-keys-only">
                     <table id="keysTable">
                         <thead>
                             <tr>
-                                <th>License Key</th>
-                                <th>Status</th>
-                                <th>Created</th>
-                                <th>Expires</th>
-                                <th>Actions</th>
+                                <th>KEY</th>
+                                <th>STATUS</th>
+                                <th>CREATED</th>
+                                <th>EXPIRES</th>
+                                <th>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -373,19 +680,25 @@
                     </table>
                 </div>
             </div>
+
             <div class="card">
-                <h2>Active Signals</h2>
+                <div class="card-header">
+                    <h2>ACTIVE SIGNALS</h2>
+                    <div class="card-stats">
+                        <span class="stat">CURRENT: <span id="activeSignalsCount">0</span></span>
+                    </div>
+                </div>
                 <table id="signalsTable">
                     <thead>
                         <tr>
-                            <th>Pair</th>
-                            <th>Type</th>
-                            <th>Entry</th>
+                            <th>PAIR</th>
+                            <th>TYPE</th>
+                            <th>ENTRY</th>
                             <th>TP</th>
                             <th>SL</th>
-                            <th>Timeframe</th>
-                            <th>Created</th>
-                            <th>Actions</th>
+                            <th>TIMEFRAME</th>
+                            <th>CREATED</th>
+                            <th>ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -394,38 +707,39 @@
             </div>
         </div>
     </div>
+
     <!-- Signal Modal -->
     <div id="signalModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeSignalModal()">&times;</span>
-            <h2 style="color: #4ecdc4; margin-top: 0; margin-bottom: 20px;">Add New Signal</h2>
-            <div class="signal-generator" style="gap: 15px;">
+            <h2>ADD NEW SIGNAL</h2>
+            <div class="signal-generator">
                 <div class="signal-row">
-                    <label style="width: 100px;">Currency Pair:</label>
-                    <input type="text" id="signalPair" placeholder="EUR/USD">
+                    <label>CURRENCY PAIR:</label>
+                    <input type="text" id="signalPair" class="cyber-input" placeholder="EUR/USD">
                 </div>
                 <div class="signal-row">
-                    <label style="width: 100px;">Signal Type:</label>
-                    <select id="signalType">
-                        <option value="buy">Buy</option>
-                        <option value="sell">Sell</option>
+                    <label>SIGNAL TYPE:</label>
+                    <select id="signalType" class="cyber-select">
+                        <option value="buy">BUY</option>
+                        <option value="sell">SELL</option>
                     </select>
                 </div>
                 <div class="signal-row">
-                    <label style="width: 100px;">Entry Price:</label>
-                    <input type="text" id="signalEntry" placeholder="1.0850">
+                    <label>ENTRY PRICE:</label>
+                    <input type="text" id="signalEntry" class="cyber-input" placeholder="1.0850">
                 </div>
                 <div class="signal-row">
-                    <label style="width: 100px;">Take Profit:</label>
-                    <input type="text" id="signalTP" placeholder="1.0920">
+                    <label>TAKE PROFIT:</label>
+                    <input type="text" id="signalTP" class="cyber-input" placeholder="1.0920">
                 </div>
                 <div class="signal-row">
-                    <label style="width: 100px;">Stop Loss:</label>
-                    <input type="text" id="signalSL" placeholder="1.0810">
+                    <label>STOP LOSS:</label>
+                    <input type="text" id="signalSL" class="cyber-input" placeholder="1.0810">
                 </div>
                 <div class="signal-row">
-                    <label style="width: 100px;">Timeframe:</label>
-                    <select id="signalTimeframe">
+                    <label>TIMEFRAME:</label>
+                    <select id="signalTimeframe" class="cyber-select">
                         <option value="M5">M5</option>
                         <option value="M15">M15</option>
                         <option value="M30">M30</option>
@@ -435,18 +749,14 @@
                     </select>
                 </div>
                 <div class="signal-row">
-                    <label style="width: 100px;">Additional Note:</label>
-                    <input type="text" id="signalNote" placeholder="Optional note">
+                    <label>ADDITIONAL NOTE:</label>
+                    <input type="text" id="signalNote" class="cyber-input" placeholder="Optional note">
                 </div>
-                <button onclick="saveSignal()" style="width: 100%; padding: 12px; background: linear-gradient(45deg, #4ecdc4, #1a936f); color: #0f0f1b; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-weight: 600; box-shadow: 0 4px 10px rgba(78, 205, 196, 0.3);">
-                    Save Signal
-                </button>
+                <button onclick="saveSignal()" class="cyber-button">SAVE SIGNAL</button>
             </div>
         </div>
     </div>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
         // Your Firebase config
         const firebaseConfig = {
@@ -458,38 +768,279 @@
             appId: "1:655334374318:web:d107dbf37ab1e31e1c663f",
             measurementId: "G-P7RWPEPQ4V"
         };
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
         // Check if admin is already logged in
         document.addEventListener('DOMContentLoaded', function() {
+            // Create candlestick background
+            initCandlestickChart();
+            
+            // Check login status
             if (localStorage.getItem('forex_admin') === 'true') {
                 showDashboard();
             }
         });
+
+        // Candlestick chart background
+        function initCandlestickChart() {
+            const canvas = document.getElementById('candlestick-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            // Candlestick data generator
+            let candlesticks = [];
+            const candleCount = 300;
+            const timeframe = 60; // 60 minutes of data
+            
+            function generateCandlesticks() {
+                candlesticks = [];
+                let lastClose = 100;
+                
+                for (let i = 0; i < candleCount; i++) {
+                    const x = (i / candleCount) * canvas.width;
+                    const volatility = 2 + Math.random() * 3;
+                    const open = lastClose + (Math.random() * volatility * 2 - volatility);
+                    const direction = Math.random() > 0.5 ? 1 : -1;
+                    const change = volatility * direction;
+                    const close = open + change;
+                    const high = Math.max(open, close) + (Math.random() * volatility);
+                    const low = Math.min(open, close) - (Math.random() * volatility);
+                    
+                    candlesticks.push({
+                        x,
+                        open,
+                        close,
+                        high,
+                        low,
+                        color: open > close ? '#ff0000' : '#00ff00',
+                        timestamp: new Date(Date.now() - (candleCount - i) * timeframe * 60 * 1000)
+                    });
+                    
+                    lastClose = close;
+                }
+            }
+            
+            // Draw grid lines
+            function drawGrid() {
+                ctx.strokeStyle = 'rgba(50, 50, 100, 0.3)';
+                ctx.lineWidth = 0.5;
+                
+                // Horizontal lines (5 major grid lines)
+                for (let i = 0; i < 6; i++) {
+                    const y = (i / 5) * canvas.height;
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+                
+                // Vertical lines (10 major grid lines)
+                for (let i = 0; i < 11; i++) {
+                    const x = (i / 10) * canvas.width;
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+            }
+            
+            // Draw candlesticks
+            function drawCandlesticks() {
+                // Calculate price range
+                let minPrice = Infinity;
+                let maxPrice = -Infinity;
+                
+                candlesticks.forEach(candle => {
+                    minPrice = Math.min(minPrice, candle.low);
+                    maxPrice = Math.max(maxPrice, candle.high);
+                });
+                
+                const priceRange = maxPrice - minPrice;
+                
+                // Draw each candlestick
+                candlesticks.forEach(candle => {
+                    // Map price to canvas coordinates
+                    const mapPrice = price => {
+                        return canvas.height - ((price - minPrice) / priceRange) * canvas.height;
+                    };
+                    
+                    const openY = mapPrice(candle.open);
+                    const closeY = mapPrice(candle.close);
+                    const highY = mapPrice(candle.high);
+                    const lowY = mapPrice(candle.low);
+                    
+                    // Draw wick
+                    ctx.strokeStyle = candle.color;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(candle.x, highY);
+                    ctx.lineTo(candle.x, lowY);
+                    ctx.stroke();
+                    
+                    // Draw body
+                    ctx.fillStyle = candle.color;
+                    const bodyHeight = Math.abs(closeY - openY);
+                    const bodyY = Math.min(openY, closeY);
+                    
+                    // Only draw body if there's height
+                    if (bodyHeight > 0) {
+                        ctx.fillRect(
+                            candle.x - 2, 
+                            bodyY, 
+                            4, 
+                            bodyHeight
+                        );
+                    }
+                });
+            }
+            
+            // Draw time labels
+            function drawTimeLabels() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                
+                // Draw labels for last 5 hours
+                for (let i = 0; i < 5; i++) {
+                    const x = canvas.width - (i * (canvas.width / 5));
+                    const time = new Date(Date.now() - (4 - i) * 60 * 60 * 1000);
+                    const timeStr = `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
+                    ctx.fillText(timeStr, x, canvas.height - 10);
+                }
+            }
+            
+            // Draw price labels
+            function drawPriceLabels() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'right';
+                
+                // Calculate price range
+                let minPrice = Infinity;
+                let maxPrice = -Infinity;
+                
+                candlesticks.forEach(candle => {
+                    minPrice = Math.min(minPrice, candle.low);
+                    maxPrice = Math.max(maxPrice, candle.high);
+                });
+                
+                const priceRange = maxPrice - minPrice;
+                const priceStep = priceRange / 5;
+                
+                // Draw price labels
+                for (let i = 0; i <= 5; i++) {
+                    const price = minPrice + (i * priceStep);
+                    const y = canvas.height - (i * (canvas.height / 5));
+                    ctx.fillText(price.toFixed(2), canvas.width - 10, y - 5);
+                }
+            }
+            
+            // Animate candlesticks
+            function animateCandlesticks() {
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw grid
+                drawGrid();
+                
+                // Draw price labels
+                drawPriceLabels();
+                
+                // Draw time labels
+                drawTimeLabels();
+                
+                // Update candlesticks
+                candlesticks.forEach((candle, index) => {
+                    // Simulate new data
+                    if (index === candlesticks.length - 1) {
+                        const volatility = 0.5 + Math.random() * 1;
+                        const change = volatility * (Math.random() > 0.5 ? 1 : -1);
+                        candle.close += change;
+                        candle.high = Math.max(candle.high, candle.close);
+                        candle.low = Math.min(candle.low, candle.close);
+                    }
+                    
+                    // Move candles from right to left
+                    candle.x += 0.05;
+                    if (candle.x > canvas.width) {
+                        // Remove old candle
+                        candlesticks.shift();
+                        
+                        // Add new candle
+                        const lastCandle = candlesticks[candlesticks.length - 1];
+                        const volatility = 2 + Math.random() * 3;
+                        const open = lastCandle.close;
+                        const direction = Math.random() > 0.5 ? 1 : -1;
+                        const change = volatility * direction;
+                        const close = open + change;
+                        const high = Math.max(open, close) + (Math.random() * volatility);
+                        const low = Math.min(open, close) - (Math.random() * volatility);
+                        
+                        candlesticks.push({
+                            x: 0,
+                            open,
+                            close,
+                            high,
+                            low,
+                            color: open > close ? '#ff0000' : '#00ff00',
+                            timestamp: new Date()
+                        });
+                    }
+                });
+                
+                // Draw candlesticks
+                drawCandlesticks();
+                
+                requestAnimationFrame(animateCandlesticks);
+            }
+            
+            generateCandlesticks();
+            animateCandlesticks();
+        }
+
+        // Login and auth functions
         function loginAdmin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            
             if (username === 'admin' && password === 'admin###') {
                 localStorage.setItem('forex_admin', 'true');
                 showDashboard();
             } else {
-                showMessage('Invalid credentials', 'error');
+                showMessage('INVALID CREDENTIALS', 'error');
             }
         }
+
         function showDashboard() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
-            document.querySelector('.dashboard-container').style.display = 'block';
+            
+            // Add glowing effect to dashboard
+            document.body.classList.add('dashboard-active');
+            
+            // Load data
             loadRecentKeys();
             loadSignals();
         }
+
         function logout() {
             localStorage.removeItem('forex_admin');
             document.getElementById('dashboardPage').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
         }
-        // Generate random license key
+
+        // Key generation and management
         function generateKey() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let key = '';
@@ -498,24 +1049,28 @@
                 if ((i + 1) % 4 === 0 && i !== 15) key += '-';
             }
             document.getElementById('newKey').value = key;
-            showMessage('Key generated! Select duration and click "Activate Key"', 'success');
+            showMessage('KEY GENERATED! SELECT DURATION AND CLICK "ACTIVATE KEY"', 'success');
         }
+
         function saveKey() {
             const keyInput = document.getElementById('newKey').value;
             const durationValue = parseInt(document.getElementById('durationValue').value);
             const durationUnit = document.getElementById('durationUnit').value;
+            
             if (!keyInput) {
-                showMessage('Generate a key first', 'error');
+                showMessage('GENERATE A KEY FIRST', 'error');
                 return;
             }
             if (!durationValue || !durationUnit) {
-                showMessage('Please select a valid duration', 'error');
+                showMessage('PLEASE SELECT A VALID DURATION', 'error');
                 return;
             }
+            
             const formattedKey = keyInput.replace(/[^A-Z0-9]/gi, '')
                 .replace(/(.{4})/g, '$1-')
                 .slice(0, 19)
                 .toUpperCase();
+            
             // Calculate expiration date based on selected duration
             const now = new Date();
             let expiresAt = new Date(now);
@@ -539,6 +1094,7 @@
                     expiresAt.setMonth(now.getMonth() + durationValue);
                     break;
             }
+            
             // Save to Firestore
             db.collection('licenseKeys').add({
                 key: formattedKey,
@@ -552,15 +1108,16 @@
             .then(() => {
                 document.getElementById('newKey').value = '';
                 loadRecentKeys();
-                showMessage('Key activated successfully!', 'success');
+                showMessage('KEY ACTIVATED SUCCESSFULLY!', 'success');
             })
             .catch((error) => {
                 console.error("Error saving key: ", error);
-                showMessage('Error saving key: ' + error.message, 'error');
+                showMessage('ERROR SAVING KEY: ' + error.message, 'error');
             });
         }
+
         function revokeKey(keyId) {
-            if (!confirm('Are you sure you want to revoke this license key?')) {
+            if (!confirm('ARE YOU SURE YOU WANT TO REVOKE THIS LICENSE KEY?')) {
                 return;
             }
             db.collection('licenseKeys').doc(keyId).update({
@@ -569,104 +1126,14 @@
             })
             .then(() => {
                 loadRecentKeys();
-                showMessage('Key revoked', 'success');
+                showMessage('KEY REVOKED', 'success');
             })
             .catch((error) => {
                 console.error("Error revoking key: ", error);
-                showMessage('Error revoking key: ' + error.message, 'error');
+                showMessage('ERROR REVOKING KEY: ' + error.message, 'error');
             });
         }
-        function loadAllKeys() {
-            const modal = document.createElement('div');
-            modal.style.position = 'fixed';
-            modal.style.top = '0';
-            modal.style.left = '0';
-            modal.style.width = '100%';
-            modal.style.height = '100%';
-            modal.style.background = 'rgba(0,0,0,0.85)';
-            modal.style.zIndex = '2000';
-            modal.style.overflow = 'auto';
-            const content = document.createElement('div');
-            content.style.background = '#151729';
-            content.style.margin = '50px auto';
-            content.style.width = '90%';
-            content.style.maxWidth = '1200px';
-            content.style.borderRadius = '12px';
-            content.style.padding = '20px';
-            content.style.position = 'relative';
-            const closeBtn = document.createElement('span');
-            closeBtn.innerHTML = '&times;';
-            closeBtn.style.position = 'absolute';
-            closeBtn.style.top = '15px';
-            closeBtn.style.right = '20px';
-            closeBtn.style.color = '#aaa';
-            closeBtn.style.fontSize = '28px';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.style.transition = 'all 0.3s';
-            closeBtn.onmouseover = () => closeBtn.style.color = '#4ecdc4';
-            closeBtn.onclick = () => document.body.removeChild(modal);
-            const title = document.createElement('h2');
-            title.textContent = 'All License Keys';
-            title.style.color = '#4ecdc4';
-            title.style.marginTop = '0';
-            const table = document.createElement('table');
-            table.style.width = '100%';
-            table.style.borderCollapse = 'collapse';
-            table.style.marginTop = '20px';
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>License Key</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                    <th>Expires</th>
-                    <th>Actions</th>
-                </tr>
-            `;
-            const tbody = document.createElement('tbody');
-            // Load all keys
-            db.collection('licenseKeys')
-                .orderBy('createdAt', 'desc')
-                .get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
-                        let expiresAt = 'N/A';
-                        let statusClass = 'status ' + data.status;
-                        if (data.expiresAt) {
-                            const expiresDate = data.expiresAt.toDate();
-                            expiresAt = expiresDate.toLocaleString();
-                        }
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${data.key}</td>
-                            <td><span class="${statusClass}">${data.status}</span></td>
-                            <td>${createdAt}</td>
-                            <td>${expiresAt}</td>
-                            <td>
-                                ${data.status === 'active' ? 
-                                    `<button class="action-btn" onclick="revokeKey('${doc.id}')">Revoke</button>` : 
-                                    'Revoked'}
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch((error) => {
-                    console.error("Error loading keys: ", error);
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td colspan="5" style="color: #ff6b6b; text-align: center;">Error loading keys: ${error.message}</td>`;
-                    tbody.appendChild(row);
-                });
-            table.appendChild(thead);
-            table.appendChild(tbody);
-            content.appendChild(closeBtn);
-            content.appendChild(title);
-            content.appendChild(table);
-            modal.appendChild(content);
-            document.body.appendChild(modal);
-        }
+
         function loadRecentKeys() {
             db.collection('licenseKeys')
                 .orderBy('createdAt', 'desc')
@@ -676,12 +1143,19 @@
                     tbody.innerHTML = '';
                     // Get only the last 3 active keys
                     const activeKeys = [];
+                    let activeCount = 0;
+                    
                     querySnapshot.forEach((doc) => {
                         const data = doc.data();
                         if (data.status === 'active') {
-                            activeKeys.push({id: doc.id,  data});
+                            activeKeys.push({id: doc.id, data});
+                            activeCount++;
                         }
                     });
+                    
+                    // Update active keys count
+                    document.getElementById('activeKeysCount').textContent = activeCount;
+                    
                     // Take only the last 3
                     const recentKeys = activeKeys.slice(0, 3);
                     recentKeys.forEach(item => {
@@ -689,6 +1163,7 @@
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
                         let expiresAt = 'N/A';
                         let statusClass = 'status ' + data.status;
+                        
                         if (data.expiresAt) {
                             const expiresDate = data.expiresAt.toDate();
                             expiresAt = expiresDate.toLocaleString();
@@ -697,6 +1172,7 @@
                                 statusClass = 'status expired';
                             }
                         }
+                        
                         const row = `
                             <tr>
                                 <td>${data.key}</td>
@@ -704,17 +1180,18 @@
                                 <td>${createdAt}</td>
                                 <td>${expiresAt}</td>
                                 <td>
-                                    <button class="action-btn" onclick="revokeKey('${item.id}')">Revoke</button>
+                                    <button class="action-btn" onclick="revokeKey('${item.id}')">REVOKE</button>
                                 </td>
                             </tr>
                         `;
                         tbody.innerHTML += row;
                     });
+                    
                     // If no active keys, show message
                     if (recentKeys.length === 0) {
                         tbody.innerHTML = `
                             <tr>
-                                <td colspan="5" style="text-align: center; color: #aaa;">No active license keys</td>
+                                <td colspan="5" style="text-align: center; color: #aaa;">NO ACTIVE LICENSE KEYS</td>
                             </tr>
                         `;
                     }
@@ -722,13 +1199,15 @@
                 .catch((error) => {
                     console.error("Error loading keys: ", error);
                     const tbody = document.querySelector('#keysTable tbody');
-                    tbody.innerHTML = `<tr><td colspan="5" style="color: #ff6b6b; text-align: center;">Error loading keys: ${error.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" style="color: #ff6b6b; text-align: center;">ERROR LOADING KEYS: ${error.message}</td></tr>`;
                 });
         }
+
         // Signal management functions
         function openSignalModal() {
             document.getElementById('signalModal').style.display = 'flex';
         }
+
         function closeSignalModal() {
             document.getElementById('signalModal').style.display = 'none';
             // Clear form
@@ -738,6 +1217,7 @@
             document.getElementById('signalSL').value = '';
             document.getElementById('signalNote').value = '';
         }
+
         function saveSignal() {
             const pair = document.getElementById('signalPair').value.trim();
             const type = document.getElementById('signalType').value;
@@ -746,10 +1226,12 @@
             const sl = document.getElementById('signalSL').value.trim();
             const timeframe = document.getElementById('signalTimeframe').value;
             const note = document.getElementById('signalNote').value.trim();
+            
             if (!pair || !entry || !tp || !sl) {
-                alert('Please fill in all required fields (Pair, Entry, TP, SL)');
+                showMessage('PLEASE FILL IN ALL REQUIRED FIELDS (PAIR, ENTRY, TP, SL)', 'error');
                 return;
             }
+            
             db.collection('signals').add({
                 pair: pair,
                 type: type,
@@ -765,15 +1247,16 @@
             .then(() => {
                 closeSignalModal();
                 loadSignals();
-                showMessage('Signal added successfully!', 'success');
+                showMessage('SIGNAL ADDED SUCCESSFULLY!', 'success');
             })
             .catch((error) => {
                 console.error("Error adding signal: ", error);
-                showMessage('Error adding signal: ' + error.message, 'error');
+                showMessage('ERROR ADDING SIGNAL: ' + error.message, 'error');
             });
         }
+
         function deactivateSignal(signalId) {
-            if (!confirm('Are you sure you want to deactivate this signal?')) {
+            if (!confirm('ARE YOU SURE YOU WANT TO DEACTIVATE THIS SIGNAL?')) {
                 return;
             }
             db.collection('signals').doc(signalId).update({
@@ -782,13 +1265,14 @@
             })
             .then(() => {
                 loadSignals();
-                showMessage('Signal deactivated', 'success');
+                showMessage('SIGNAL DEACTIVATED', 'success');
             })
             .catch((error) => {
                 console.error("Error deactivating signal: ", error);
-                showMessage('Error deactivating signal: ' + error.message, 'error');
+                showMessage('ERROR DEACTIVATING SIGNAL: ' + error.message, 'error');
             });
         }
+
         function loadSignals() {
             db.collection('signals')
                 .get()
@@ -797,16 +1281,24 @@
                     tbody.innerHTML = '';
                     // Filter and sort client-side (no index needed)
                     const activeSignals = [];
+                    let activeCount = 0;
+                    
                     querySnapshot.forEach(doc => {
                         const data = doc.data();
                         if (data.status === 'active') {
                             activeSignals.push({id: doc.id, ...data});
+                            activeCount++;
                         }
                     });
+                    
+                    // Update active signals count
+                    document.getElementById('activeSignalsCount').textContent = activeCount;
+                    
                     // Sort by createdAt
                     activeSignals.sort((a, b) => {
                         return b.createdAt.seconds - a.createdAt.seconds;
                     });
+                    
                     activeSignals.forEach(data => {
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
                         const row = `
@@ -819,17 +1311,18 @@
                                 <td>${data.timeframe}</td>
                                 <td>${createdAt}</td>
                                 <td>
-                                    <button class="action-btn" onclick="deactivateSignal('${data.id}')">Deactivate</button>
+                                    <button class="action-btn" onclick="deactivateSignal('${data.id}')">DEACTIVATE</button>
                                 </td>
                             </tr>
                         `;
                         tbody.innerHTML += row;
                     });
+                    
                     // If no signals, show message
                     if (activeSignals.length === 0) {
                         tbody.innerHTML = `
                             <tr>
-                                <td colspan="8" style="text-align: center; color: #aaa;">No active signals</td>
+                                <td colspan="8" style="text-align: center; color: #aaa;">NO ACTIVE SIGNALS</td>
                             </tr>
                         `;
                     }
@@ -837,15 +1330,19 @@
                 .catch((error) => {
                     console.error("Error loading signals: ", error);
                     const tbody = document.querySelector('#signalsTable tbody');
-                    tbody.innerHTML = `<tr><td colspan="8" style="color: #ff6b6b; text-align: center;">Error loading signals: ${error.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" style="color: #ff6b6b; text-align: center;">ERROR LOADING SIGNALS: ${error.message}</td></tr>`;
                 });
         }
+
+        // UI helper functions
         function showMessage(text, type = 'error') {
             const messageDiv = document.getElementById('keyMessage') || document.getElementById('message');
             if (!messageDiv) return;
+            
             messageDiv.textContent = text;
             messageDiv.style.display = 'block';
-            messageDiv.className = type;
+            messageDiv.className = `message ${type}`;
+            
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
