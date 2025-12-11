@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>William Capital Admin Panel</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
@@ -24,6 +24,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Exo 2', sans-serif;
+            font-size: 14px;
         }
         body {
             background-color: var(--dark);
@@ -31,8 +32,8 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            font-size: 14px;
         }
-        /* Background Elements */
         .background {
             position: fixed;
             top: 0;
@@ -51,45 +52,34 @@
             z-index: -1;
             opacity: 0.25;
         }
-        /* Card and Layout Styles */
         .dashboard-container {
             display: none;
-            max-width: 1400px;
-            margin: 20px auto;
-            padding: 0 20px;
+            max-width: 100%;
+            margin: 15px auto;
+            padding: 10px;
         }
         .main-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 15px;
         }
         header {
             background: linear-gradient(90deg, var(--darker) 0%, #0c0c20 100%);
-            padding: 15px 20px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-radius: var(--border-radius);
-            margin: 0 20px 15px;
+            margin: 0 10px 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 15px rgba(26, 84, 156, 0.2);
             border: 1px solid rgba(26, 84, 156, 0.3);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
         }
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm25-6c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%231a549c' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-            opacity: 0.2;
-        }
         .logo {
             color: var(--secondary);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
             text-shadow: 0 0 10px rgba(70, 70, 85, 0.5);
             font-family: 'Orbitron', sans-serif;
@@ -97,13 +87,13 @@
         }
         .status-indicators {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
         }
         .status-indicator {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.75rem;
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--primary);
             text-transform: uppercase;
@@ -117,7 +107,7 @@
             background: linear-gradient(45deg, var(--danger), #c0392b);
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 5px 10px;
             border-radius: var(--border-radius);
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
@@ -125,16 +115,13 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 15px rgba(255, 77, 77, 0.4);
+            font-size: 0.85rem;
         }
         .card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(26, 84, 156, 0.1);
             border: 1px solid rgba(26, 84, 156, 0.2);
             position: relative;
@@ -144,47 +131,41 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .card-header h2 {
             color: var(--secondary);
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
             text-shadow: 0 0 5px rgba(70, 70, 85, 0.3);
             font-family: 'Orbitron', sans-serif;
         }
         .card-stats {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         .stat {
             background: rgba(0, 0, 0, 0.4);
-            padding: 3px 8px;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.75rem;
             color: var(--secondary);
-        }
-        h2 {
-            color: var(--secondary);
-            margin-top: 0;
-            font-weight: 600;
-            text-shadow: 0 0 5px rgba(70, 70, 85, 0.2);
-            font-family: 'Orbitron', sans-serif;
         }
         .key-generator, .signal-generator {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
         }
         .key-row, .signal-row {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
         input, select, button {
-            padding: 12px;
+            padding: 10px;
             border-radius: var(--border-radius);
             font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
         }
         input, select {
             flex: 1;
@@ -192,35 +173,6 @@
             border: 1px solid rgba(26, 84, 156, 0.3);
             color: white;
             transition: all 0.3s;
-            font-size: 0.95rem;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 84, 156, 0.2);
-        }
-        /* Professional inputs */
-        .cyber-input {
-            position: relative;
-            background: rgba(10, 10, 30, 0.5);
-            border: 1px solid rgba(26, 84, 156, 0.3);
-            color: white;
-            transition: all 0.3s;
-        }
-        .cyber-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 84, 156, 0.2);
-        }
-        .cyber-select {
-            position: relative;
-            background: rgba(10, 10, 30, 0.5);
-            border: 1px solid rgba(26, 84, 156, 0.3);
-            color: white;
-            transition: all 0.3s;
-        }
-        .cyber-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 84, 156, 0.2);
         }
         .cyber-button {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
@@ -233,6 +185,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
+            font-size: 0.9rem;
             position: relative;
             overflow: hidden;
         }
@@ -240,46 +193,22 @@
             transform: translateY(-2px);
             box-shadow: 0 7px 15px rgba(26, 84, 156, 0.4);
         }
-        .cyber-button:active {
-            transform: translateY(0);
-        }
-        .cyber-button::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(42, 42, 74, 0.2) 0%, transparent 70%);
-            z-index: -1;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% {
-                transform: scale(0.5);
-                opacity: 0.3;
-            }
-            50% {
-                transform: scale(1.5);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 12px;
             border-radius: var(--border-radius);
             overflow: hidden;
+            font-size: 12px;
         }
         th, td {
-            padding: 12px 15px;
+            padding: 8px 10px;
             text-align: left;
             border-bottom: 1px solid rgba(50, 50, 80, 0.5);
             border-right: 1px solid rgba(50, 50, 80, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         th:last-child, td:last-child {
             border-right: none;
@@ -289,16 +218,16 @@
             color: var(--secondary);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             letter-spacing: 1px;
         }
         tr:hover {
             background: rgba(26, 84, 156, 0.05);
         }
         .status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            padding: 3px 7px;
+            border-radius: 10px;
+            font-size: 0.75rem;
             display: inline-block;
             text-transform: uppercase;
             font-weight: 500;
@@ -320,11 +249,13 @@
             border: none;
             color: var(--primary);
             cursor: pointer;
-            margin-right: 5px;
+            margin-right: 3px;
             font-weight: 500;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-size: 0.75rem;
+            padding: 2px 4px;
         }
         .action-btn:hover {
             color: var(--secondary);
@@ -342,16 +273,12 @@
         .action-btn.edit:hover {
             color: #ffcc33;
         }
-        .key-help, .signal-help {
-            font-size: 0.85rem;
-            color: #aaa;
-            margin-top: 5px;
-        }
         .message {
             text-align: center;
-            margin-top: 10px;
-            padding: 8px;
+            margin-top: 8px;
+            padding: 5px;
             border-radius: 4px;
+            font-size: 0.85rem;
         }
         .message.success {
             color: var(--success);
@@ -374,15 +301,12 @@
             align-items: center;
             animation: modalFadeIn 0.4s;
         }
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
         .modal-content {
             background: var(--card-bg);
             margin: 10% auto;
-            padding: 25px;
-            width: 550px;
+            padding: 15px;
+            width: 90%;
+            max-width: 450px;
             border-radius: var(--border-radius);
             border: 1px solid rgba(26, 84, 156, 0.3);
             box-shadow: 0 0 50px rgba(26, 84, 156, 0.2);
@@ -392,11 +316,11 @@
         .close {
             color: #aaa;
             float: right;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: bold;
             position: absolute;
-            top: 15px;
-            right: 20px;
+            top: 10px;
+            right: 15px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -404,15 +328,14 @@
             color: var(--primary);
             transform: scale(1.1);
         }
-        /* Login Page Styles */
         .login-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 350px;
             background: var(--card-bg);
-            padding: 40px;
+            padding: 25px;
             border-radius: var(--border-radius);
             box-shadow: 0 0 30px rgba(26, 84, 156, 0.2);
-            margin: 50px auto;
+            margin: 30px auto;
             border: 1px solid rgba(26, 84, 156, 0.1);
             position: relative;
             overflow: hidden;
@@ -420,95 +343,53 @@
             flex-direction: column;
             align-items: center;
         }
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
         .login-header h1 {
             color: var(--secondary);
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             text-shadow: 0 0 10px rgba(70, 70, 85, 0.5);
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 3px;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         .login-header .tagline {
             color: var(--primary);
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-        .login-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(26, 84, 156, 0.05) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
         .form-group {
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: var(--secondary);
             font-weight: 500;
+            font-size: 0.85rem;
         }
         .error-message {
             color: var(--danger);
             text-align: center;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            min-height: 20px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            min-height: 15px;
         }
-        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
             .key-row, .signal-row {
                 flex-direction: column;
             }
-            .login-container {
-                margin: 20px 15px;
-            }
         }
-        /* Glowing elements */
-        .glow {
-            text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
-        }
-        .glow-hover:hover {
-            text-shadow: 0 0 8px var(--primary), 0 0 15px var(--primary);
-        }
-        /* Professional chart styles */
-        .chart-grid {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        .chart-grid-line {
-            position: absolute;
-            background: rgba(42, 42, 74, 0.1);
-        }
-        .horizontal-grid {
-            width: 100%;
-            height: 1px;
-        }
-        .vertical-grid {
-            height: 100%;
-            width: 1px;
+        .table-container {
+            overflow-x: auto;
+            margin: 10px 0;
+            -webkit-overflow-scrolling: touch;
         }
         .contact-info {
             text-align: center;
-            margin: 20px auto;
-            font-size: 0.9rem;
+            margin: 15px auto;
+            font-size: 0.8rem;
             color: #a3a3c2;
             max-width: 600px;
         }
@@ -523,11 +404,9 @@
     </style>
 </head>
 <body>
-    <!-- Dynamic Background Elements -->
     <div class="background">
         <canvas id="candlestick-canvas"></canvas>
     </div>
-    <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-header">
             <h1>WILLIAM CAPITAL</h1>
@@ -547,10 +426,9 @@
         </div>
         <div id="message" class="error-message"></div>
     </div>
-    <!-- Dashboard Page -->
     <div id="dashboardPage" class="dashboard-container">
         <header>
-            <div class="logo">WILLIAM CAPITAL ADMIN PANEL</div>
+            <div class="logo">WILLIAM CAPITAL ADMIN</div>
             <div class="status-indicators">
                 <div class="status-indicator active">SECURE</div>
                 <button class="logout-btn" onclick="logout()">LOG OUT</button>
@@ -564,13 +442,13 @@
                 <div class="card-header">
                     <h2>GENERATE LICENSE KEY</h2>
                     <div class="card-stats">
-                        <span class="stat">ACTIVE KEYS: <span id="activeKeysCount">0</span></span>
+                        <span class="stat">ACTIVE: <span id="activeKeysCount">0</span></span>
                     </div>
                 </div>
                 <div class="key-generator">
                     <div class="key-row">
-                        <input type="text" id="newKey" readonly class="cyber-input" placeholder="Generate a new key">
-                        <button onclick="generateKey()" class="cyber-button">GENERATE</button>
+                        <input type="text" id="newKey" readonly class="cyber-input" placeholder="Generate key">
+                        <button onclick="generateKey()" class="cyber-button" style="width: auto;">GEN</button>
                     </div>
                     <div class="key-row">
                         <select id="durationValue" class="cyber-select">
@@ -595,7 +473,7 @@
                             <option value="weeks">Weeks</option>
                             <option value="months">Months</option>
                         </select>
-                        <button onclick="saveKey()" class="cyber-button">ACTIVATE KEY</button>
+                        <button onclick="saveKey()" class="cyber-button" style="width: auto;">ACTIVATE</button>
                     </div>
                     <div class="key-help">
                         <p>William Capital Plans: 7 Days ($10), 14 Days ($20), 30 Days ($30)</p>
@@ -606,22 +484,22 @@
             <div class="card">
                 <div class="card-header">
                     <h2>ADD NEW SIGNAL</h2>
-                    <button onclick="openSignalModal()" class="cyber-button">
-                        + ADD NEW SIGNAL
+                    <button onclick="openSignalModal()" class="cyber-button" style="font-size: 0.85rem; width: auto;">
+                        + ADD
                     </button>
                 </div>
                 <div class="signal-help">
-                    <p>Use this form to add new forex signals for William Capital users.</p>
+                    <p>Add new forex signals for William Capital users</p>
                 </div>
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h2>LICENSE KEYS MANAGEMENT</h2>
+                    <h2>LICENSE KEYS</h2>
                     <div class="card-stats">
-                        <span class="stat">LAST 3 ACTIVE</span>
+                        <span class="stat">LAST 3</span>
                     </div>
                 </div>
-                <div class="recent-keys-only">
+                <div class="table-container">
                     <table id="keysTable">
                         <thead>
                             <tr>
@@ -644,56 +522,57 @@
                         <span class="stat">CURRENT: <span id="activeSignalsCount">0</span></span>
                     </div>
                 </div>
-                <table id="signalsTable">
-                    <thead>
-                        <tr>
-                            <th>PAIR</th>
-                            <th>TYPE</th>
-                            <th>ENTRY</th>
-                            <th>TP</th>
-                            <th>SL</th>
-                            <th>TIMEFRAME</th>
-                            <th>CREATED</th>
-                            <th>ACTIONS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table id="signalsTable">
+                        <thead>
+                            <tr>
+                                <th>PAIR</th>
+                                <th>TYPE</th>
+                                <th>ENTRY</th>
+                                <th>TP</th>
+                                <th>SL</th>
+                                <th>TIME</th>
+                                <th>CREATED</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Add Signal Modal -->
     <div id="signalModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeSignalModal()">&times;</span>
-            <h2>ADD NEW SIGNAL</h2>
+            <h2 style="font-size: 1.2rem;">ADD SIGNAL</h2>
             <div class="signal-generator">
                 <div class="signal-row">
-                    <label>CURRENCY PAIR:</label>
+                    <label style="font-size: 0.85rem;">PAIR:</label>
                     <input type="text" id="signalPair" class="cyber-input" placeholder="EUR/USD">
                 </div>
                 <div class="signal-row">
-                    <label>SIGNAL TYPE:</label>
+                    <label style="font-size: 0.85rem;">TYPE:</label>
                     <select id="signalType" class="cyber-select">
                         <option value="buy">BUY</option>
                         <option value="sell">SELL</option>
                     </select>
                 </div>
                 <div class="signal-row">
-                    <label>ENTRY PRICE:</label>
+                    <label style="font-size: 0.85rem;">ENTRY:</label>
                     <input type="text" id="signalEntry" class="cyber-input" placeholder="1.0850">
                 </div>
                 <div class="signal-row">
-                    <label>TAKE PROFIT:</label>
+                    <label style="font-size: 0.85rem;">TP:</label>
                     <input type="text" id="signalTP" class="cyber-input" placeholder="1.0920">
                 </div>
                 <div class="signal-row">
-                    <label>STOP LOSS:</label>
+                    <label style="font-size: 0.85rem;">SL:</label>
                     <input type="text" id="signalSL" class="cyber-input" placeholder="1.0810">
                 </div>
                 <div class="signal-row">
-                    <label>TIMEFRAME:</label>
+                    <label style="font-size: 0.85rem;">TIME:</label>
                     <select id="signalTimeframe" class="cyber-select">
                         <option value="M5">M5</option>
                         <option value="M15">M15</option>
@@ -704,45 +583,44 @@
                     </select>
                 </div>
                 <div class="signal-row">
-                    <label>ADDITIONAL NOTE:</label>
-                    <input type="text" id="signalNote" class="cyber-input" placeholder="Optional note">
+                    <label style="font-size: 0.85rem;">NOTE:</label>
+                    <input type="text" id="signalNote" class="cyber-input" placeholder="Note">
                 </div>
-                <button onclick="saveSignal()" class="cyber-button">SAVE SIGNAL</button>
+                <button onclick="saveSignal()" class="cyber-button">SAVE</button>
             </div>
         </div>
     </div>
-    <!-- Edit Signal Modal -->
     <div id="editSignalModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditSignalModal()">&times;</span>
-            <h2>EDIT SIGNAL</h2>
+            <h2 style="font-size: 1.2rem;">EDIT SIGNAL</h2>
             <input type="hidden" id="editSignalId">
             <div class="signal-generator">
                 <div class="signal-row">
-                    <label>CURRENCY PAIR:</label>
+                    <label style="font-size: 0.85rem;">PAIR:</label>
                     <input type="text" id="editSignalPair" class="cyber-input" placeholder="EUR/USD">
                 </div>
                 <div class="signal-row">
-                    <label>SIGNAL TYPE:</label>
+                    <label style="font-size: 0.85rem;">TYPE:</label>
                     <select id="editSignalType" class="cyber-select">
                         <option value="buy">BUY</option>
                         <option value="sell">SELL</option>
                     </select>
                 </div>
                 <div class="signal-row">
-                    <label>ENTRY PRICE:</label>
+                    <label style="font-size: 0.85rem;">ENTRY:</label>
                     <input type="text" id="editSignalEntry" class="cyber-input" placeholder="1.0850">
                 </div>
                 <div class="signal-row">
-                    <label>TAKE PROFIT:</label>
+                    <label style="font-size: 0.85rem;">TP:</label>
                     <input type="text" id="editSignalTP" class="cyber-input" placeholder="1.0920">
                 </div>
                 <div class="signal-row">
-                    <label>STOP LOSS:</label>
+                    <label style="font-size: 0.85rem;">SL:</label>
                     <input type="text" id="editSignalSL" class="cyber-input" placeholder="1.0810">
                 </div>
                 <div class="signal-row">
-                    <label>TIMEFRAME:</label>
+                    <label style="font-size: 0.85rem;">TIME:</label>
                     <select id="editSignalTimeframe" class="cyber-select">
                         <option value="M5">M5</option>
                         <option value="M15">M15</option>
@@ -753,17 +631,16 @@
                     </select>
                 </div>
                 <div class="signal-row">
-                    <label>ADDITIONAL NOTE:</label>
-                    <input type="text" id="editSignalNote" class="cyber-input" placeholder="Optional note">
+                    <label style="font-size: 0.85rem;">NOTE:</label>
+                    <input type="text" id="editSignalNote" class="cyber-input" placeholder="Note">
                 </div>
-                <button onclick="updateSignal()" class="cyber-button">UPDATE SIGNAL</button>
+                <button onclick="updateSignal()" class="cyber-button">UPDATE</button>
             </div>
         </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
-        // Your Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyA6A67d0YBJlhcT9GUGRVHMzGue1BM2rsA",
             authDomain: "forex-signals-platform.firebaseapp.com",
@@ -773,33 +650,28 @@
             appId: "1:655334374318:web:d107dbf37ab1e31e1c663f",
             measurementId: "G-P7RWPEPQ4V"
         };
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // Check if admin is already logged in
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Create candlestick background
             initCandlestickChart();
-            // Check login status
             if (localStorage.getItem('forex_admin') === 'true') {
                 showDashboard();
             }
         });
-        // Candlestick chart background
+        
         function initCandlestickChart() {
             const canvas = document.getElementById('candlestick-canvas');
             const ctx = canvas.getContext('2d');
-            // Set canvas size
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
-            // Candlestick data generator
             let candlesticks = [];
             const candleCount = 300;
-            const timeframe = 60; // 60 minutes of data
+            const timeframe = 60;
             function generateCandlesticks() {
                 candlesticks = [];
                 let lastClose = 100;
@@ -824,11 +696,9 @@
                     lastClose = close;
                 }
             }
-            // Draw grid lines
             function drawGrid() {
                 ctx.strokeStyle = 'rgba(50, 50, 100, 0.3)';
                 ctx.lineWidth = 0.5;
-                // Horizontal lines (5 major grid lines)
                 for (let i = 0; i < 6; i++) {
                     const y = (i / 5) * canvas.height;
                     ctx.beginPath();
@@ -836,7 +706,6 @@
                     ctx.lineTo(canvas.width, y);
                     ctx.stroke();
                 }
-                // Vertical lines (10 major grid lines)
                 for (let i = 0; i < 11; i++) {
                     const x = (i / 10) * canvas.width;
                     ctx.beginPath();
@@ -845,9 +714,7 @@
                     ctx.stroke();
                 }
             }
-            // Draw candlesticks
             function drawCandlesticks() {
-                // Calculate price range
                 let minPrice = Infinity;
                 let maxPrice = -Infinity;
                 candlesticks.forEach(candle => {
@@ -855,9 +722,7 @@
                     maxPrice = Math.max(maxPrice, candle.high);
                 });
                 const priceRange = maxPrice - minPrice;
-                // Draw each candlestick
                 candlesticks.forEach(candle => {
-                    // Map price to canvas coordinates
                     const mapPrice = price => {
                         return canvas.height - ((price - minPrice) / priceRange) * canvas.height;
                     };
@@ -865,18 +730,15 @@
                     const closeY = mapPrice(candle.close);
                     const highY = mapPrice(candle.high);
                     const lowY = mapPrice(candle.low);
-                    // Draw wick
                     ctx.strokeStyle = candle.color;
                     ctx.lineWidth = 1;
                     ctx.beginPath();
                     ctx.moveTo(candle.x, highY);
                     ctx.lineTo(candle.x, lowY);
                     ctx.stroke();
-                    // Draw body
                     ctx.fillStyle = candle.color;
                     const bodyHeight = Math.abs(closeY - openY);
                     const bodyY = Math.min(openY, closeY);
-                    // Only draw body if there's height
                     if (bodyHeight > 0) {
                         ctx.fillRect(
                             candle.x - 2, 
@@ -887,12 +749,10 @@
                     }
                 });
             }
-            // Draw time labels
             function drawTimeLabels() {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                 ctx.font = '10px Arial';
                 ctx.textAlign = 'center';
-                // Draw labels for last 5 hours
                 for (let i = 0; i < 5; i++) {
                     const x = canvas.width - (i * (canvas.width / 5));
                     const time = new Date(Date.now() - (4 - i) * 60 * 60 * 1000);
@@ -900,12 +760,10 @@
                     ctx.fillText(timeStr, x, canvas.height - 10);
                 }
             }
-            // Draw price labels
             function drawPriceLabels() {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                 ctx.font = '10px Arial';
                 ctx.textAlign = 'right';
-                // Calculate price range
                 let minPrice = Infinity;
                 let maxPrice = -Infinity;
                 candlesticks.forEach(candle => {
@@ -914,26 +772,18 @@
                 });
                 const priceRange = maxPrice - minPrice;
                 const priceStep = priceRange / 5;
-                // Draw price labels
                 for (let i = 0; i <= 5; i++) {
                     const price = minPrice + (i * priceStep);
                     const y = canvas.height - (i * (canvas.height / 5));
                     ctx.fillText(price.toFixed(2), canvas.width - 10, y - 5);
                 }
             }
-            // Animate candlesticks
             function animateCandlesticks() {
-                // Clear canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                // Draw grid
                 drawGrid();
-                // Draw price labels
                 drawPriceLabels();
-                // Draw time labels
                 drawTimeLabels();
-                // Update candlesticks
                 candlesticks.forEach((candle, index) => {
-                    // Simulate new data
                     if (index === candlesticks.length - 1) {
                         const volatility = 0.5 + Math.random() * 1;
                         const change = volatility * (Math.random() > 0.5 ? 1 : -1);
@@ -941,12 +791,9 @@
                         candle.high = Math.max(candle.high, candle.close);
                         candle.low = Math.min(candle.low, candle.close);
                     }
-                    // Move candles from right to left
                     candle.x += 0.05;
                     if (candle.x > canvas.width) {
-                        // Remove old candle
                         candlesticks.shift();
-                        // Add new candle
                         const lastCandle = candlesticks[candlesticks.length - 1];
                         const volatility = 2 + Math.random() * 3;
                         const open = lastCandle.close;
@@ -966,14 +813,13 @@
                         });
                     }
                 });
-                // Draw candlesticks
                 drawCandlesticks();
                 requestAnimationFrame(animateCandlesticks);
             }
             generateCandlesticks();
             animateCandlesticks();
         }
-        // Login and auth functions
+        
         function loginAdmin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -984,21 +830,20 @@
                 showMessage('INVALID CREDENTIALS', 'error');
             }
         }
+        
         function showDashboard() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
-            // Add glowing effect to dashboard
-            document.body.classList.add('dashboard-active');
-            // Load data
             loadRecentKeys();
             loadSignals();
         }
+        
         function logout() {
             localStorage.removeItem('forex_admin');
             document.getElementById('dashboardPage').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
         }
-        // Key generation and management
+        
         function generateKey() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let key = '';
@@ -1007,8 +852,9 @@
                 if ((i + 1) % 4 === 0 && i !== 15) key += '-';
             }
             document.getElementById('newKey').value = key;
-            showMessage('KEY GENERATED! SELECT DURATION AND CLICK "ACTIVATE KEY"', 'success');
+            showMessage('KEY GENERATED!', 'success');
         }
+        
         function saveKey() {
             const keyInput = document.getElementById('newKey').value;
             const durationValue = parseInt(document.getElementById('durationValue').value);
@@ -1018,14 +864,13 @@
                 return;
             }
             if (!durationValue || !durationUnit) {
-                showMessage('PLEASE SELECT A VALID DURATION', 'error');
+                showMessage('SELECT VALID DURATION', 'error');
                 return;
             }
             const formattedKey = keyInput.replace(/[^A-Z0-9]/gi, '')
                 .replace(/(.{4})/g, '$1-')
                 .slice(0, 19)
                 .toUpperCase();
-            // Calculate expiration date based on selected duration
             const now = new Date();
             let expiresAt = new Date(now);
             switch(durationUnit) {
@@ -1048,7 +893,6 @@
                     expiresAt.setMonth(now.getMonth() + durationValue);
                     break;
             }
-            // Save to Firestore
             db.collection('licenseKeys').add({
                 key: formattedKey,
                 status: 'active',
@@ -1068,8 +912,9 @@
                 showMessage('ERROR SAVING KEY: ' + error.message, 'error');
             });
         }
+        
         function revokeKey(keyId) {
-            if (!confirm('ARE YOU SURE YOU WANT TO REVOKE THIS LICENSE KEY?')) {
+            if (!confirm('SURE TO REVOKE THIS KEY?')) {
                 return;
             }
             db.collection('licenseKeys').doc(keyId).update({
@@ -1085,6 +930,7 @@
                 showMessage('ERROR REVOKING KEY: ' + error.message, 'error');
             });
         }
+        
         function loadRecentKeys() {
             db.collection('licenseKeys')
                 .orderBy('createdAt', 'desc')
@@ -1092,7 +938,6 @@
                 .then((querySnapshot) => {
                     const tbody = document.querySelector('#keysTable tbody');
                     tbody.innerHTML = '';
-                    // Get only the last 3 active keys
                     const activeKeys = [];
                     let activeCount = 0;
                     querySnapshot.forEach((doc) => {
@@ -1102,9 +947,7 @@
                             activeCount++;
                         }
                     });
-                    // Update active keys count
                     document.getElementById('activeKeysCount').textContent = activeCount;
-                    // Take only the last 3
                     const recentKeys = activeKeys.slice(0, 3);
                     recentKeys.forEach(item => {
                         const data = item.data;
@@ -1114,17 +957,16 @@
                         if (data.expiresAt) {
                             const expiresDate = data.expiresAt.toDate();
                             expiresAt = expiresDate.toLocaleString();
-                            // Check if expired
                             if (data.status === 'active' && expiresDate < new Date()) {
                                 statusClass = 'status expired';
                             }
                         }
                         const row = `
                             <tr>
-                                <td>${data.key}</td>
-                                <td><span class="${statusClass}">${data.status}</span></td>
-                                <td>${createdAt}</td>
-                                <td>${expiresAt}</td>
+                                <td style="font-size: 0.85rem; max-width: 100px; overflow: hidden; text-overflow: ellipsis;">${data.key}</td>
+                                <td><span class="${statusClass}" style="font-size: 0.75rem;">${data.status}</span></td>
+                                <td style="font-size: 0.85rem;">${createdAt}</td>
+                                <td style="font-size: 0.85rem;">${expiresAt}</td>
                                 <td>
                                     <button class="action-btn" onclick="revokeKey('${item.id}')">REVOKE</button>
                                 </td>
@@ -1132,11 +974,10 @@
                         `;
                         tbody.innerHTML += row;
                     });
-                    // If no active keys, show message
                     if (recentKeys.length === 0) {
                         tbody.innerHTML = `
                             <tr>
-                                <td colspan="5" style="text-align: center; color: #aaa;">NO ACTIVE LICENSE KEYS</td>
+                                <td colspan="5" style="text-align: center; color: #aaa; font-size: 0.85rem;">NO ACTIVE KEYS</td>
                             </tr>
                         `;
                     }
@@ -1144,22 +985,23 @@
                 .catch((error) => {
                     console.error("Error loading keys: ", error);
                     const tbody = document.querySelector('#keysTable tbody');
-                    tbody.innerHTML = `<tr><td colspan="5" style="color: #ff4d4d; text-align: center;">ERROR LOADING KEYS: ${error.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" style="color: #ff4d4d; text-align: center; font-size: 0.85rem;">ERROR: ${error.message}</td></tr>`;
                 });
         }
-        // Signal management functions
+        
         function openSignalModal() {
             document.getElementById('signalModal').style.display = 'flex';
         }
+        
         function closeSignalModal() {
             document.getElementById('signalModal').style.display = 'none';
-            // Clear form
             document.getElementById('signalPair').value = '';
             document.getElementById('signalEntry').value = '';
             document.getElementById('signalTP').value = '';
             document.getElementById('signalSL').value = '';
             document.getElementById('signalNote').value = '';
         }
+        
         function saveSignal() {
             const pair = document.getElementById('signalPair').value.trim();
             const type = document.getElementById('signalType').value;
@@ -1169,7 +1011,7 @@
             const timeframe = document.getElementById('signalTimeframe').value;
             const note = document.getElementById('signalNote').value.trim();
             if (!pair || !entry || !tp || !sl) {
-                showMessage('PLEASE FILL IN ALL REQUIRED FIELDS (PAIR, ENTRY, TP, SL)', 'error');
+                showMessage('FILL ALL REQUIRED FIELDS', 'error');
                 return;
             }
             db.collection('signals').add({
@@ -1187,13 +1029,14 @@
             .then(() => {
                 closeSignalModal();
                 loadSignals();
-                showMessage('SIGNAL ADDED SUCCESSFULLY!', 'success');
+                showMessage('SIGNAL ADDED!', 'success');
             })
             .catch((error) => {
                 console.error("Error adding signal: ", error);
                 showMessage('ERROR ADDING SIGNAL: ' + error.message, 'error');
             });
         }
+        
         function editSignal(signalId) {
             db.collection('signals').doc(signalId).get().then(doc => {
                 if (doc.exists) {
@@ -1210,9 +1053,11 @@
                 }
             });
         }
+        
         function closeEditSignalModal() {
             document.getElementById('editSignalModal').style.display = 'none';
         }
+        
         function updateSignal() {
             const signalId = document.getElementById('editSignalId').value;
             const pair = document.getElementById('editSignalPair').value.trim();
@@ -1224,7 +1069,7 @@
             const note = document.getElementById('editSignalNote').value.trim();
             
             if (!pair || !entry || !tp || !sl) {
-                showMessage('PLEASE FILL IN ALL REQUIRED FIELDS (PAIR, ENTRY, TP, SL)', 'error');
+                showMessage('FILL ALL REQUIRED FIELDS', 'error');
                 return;
             }
             
@@ -1241,52 +1086,36 @@
             .then(() => {
                 closeEditSignalModal();
                 loadSignals();
-                showMessage('SIGNAL UPDATED SUCCESSFULLY!', 'success');
+                showMessage('SIGNAL UPDATED!', 'success');
             })
             .catch((error) => {
                 console.error("Error updating signal: ", error);
                 showMessage('ERROR UPDATING SIGNAL: ' + error.message, 'error');
             });
         }
+        
         function deleteSignal(signalId) {
-            if (!confirm('ARE YOU SURE YOU WANT TO DELETE THIS SIGNAL? THIS ACTION CANNOT BE UNDONE.')) {
+            if (!confirm('SURE TO DELETE THIS SIGNAL?')) {
                 return;
             }
             
             db.collection('signals').doc(signalId).delete()
             .then(() => {
                 loadSignals();
-                showMessage('SIGNAL DELETED SUCCESSFULLY!', 'success');
+                showMessage('SIGNAL DELETED!', 'success');
             })
             .catch((error) => {
                 console.error("Error deleting signal: ", error);
                 showMessage('ERROR DELETING SIGNAL: ' + error.message, 'error');
             });
         }
-        function deactivateSignal(signalId) {
-            if (!confirm('ARE YOU SURE YOU WANT TO DEACTIVATE THIS SIGNAL?')) {
-                return;
-            }
-            db.collection('signals').doc(signalId).update({
-                status: 'inactive',
-                deactivatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                loadSignals();
-                showMessage('SIGNAL DEACTIVATED', 'success');
-            })
-            .catch((error) => {
-                console.error("Error deactivating signal: ", error);
-                showMessage('ERROR DEACTIVATING SIGNAL: ' + error.message, 'error');
-            });
-        }
+        
         function loadSignals() {
             db.collection('signals')
                 .get()
                 .then((querySnapshot) => {
                     const tbody = document.querySelector('#signalsTable tbody');
                     tbody.innerHTML = '';
-                    // Filter and sort client-side (no index needed)
                     const activeSignals = [];
                     let activeCount = 0;
                     querySnapshot.forEach(doc => {
@@ -1296,9 +1125,7 @@
                             activeCount++;
                         }
                     });
-                    // Update active signals count
                     document.getElementById('activeSignalsCount').textContent = activeCount;
-                    // Sort by createdAt
                     activeSignals.sort((a, b) => {
                         return b.createdAt.seconds - a.createdAt.seconds;
                     });
@@ -1306,27 +1133,25 @@
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
                         const row = `
                             <tr>
-                                <td>${data.pair}</td>
-                                <td><span class="signal-type ${data.type}">${data.type.toUpperCase()}</span></td>
-                                <td>${data.entry}</td>
-                                <td>${data.tp}</td>
-                                <td>${data.sl}</td>
-                                <td>${data.timeframe}</td>
-                                <td>${createdAt}</td>
+                                <td style="font-size: 0.85rem;">${data.pair}</td>
+                                <td style="font-size: 0.85rem;"><span class="signal-type ${data.type}" style="font-weight: bold;">${data.type.toUpperCase()}</span></td>
+                                <td style="font-size: 0.85rem;">${data.entry}</td>
+                                <td style="font-size: 0.85rem;">${data.tp}</td>
+                                <td style="font-size: 0.85rem;">${data.sl}</td>
+                                <td style="font-size: 0.85rem;">${data.timeframe}</td>
+                                <td style="font-size: 0.85rem;">${createdAt}</td>
                                 <td>
                                     <button class="action-btn edit" onclick="editSignal('${data.id}')">EDIT</button>
                                     <button class="action-btn delete" onclick="deleteSignal('${data.id}')">DELETE</button>
-                                    <button class="action-btn" onclick="deactivateSignal('${data.id}')">DEACTIVATE</button>
                                 </td>
                             </tr>
                         `;
                         tbody.innerHTML += row;
                     });
-                    // If no signals, show message
                     if (activeSignals.length === 0) {
                         tbody.innerHTML = `
                             <tr>
-                                <td colspan="8" style="text-align: center; color: #aaa;">NO ACTIVE SIGNALS</td>
+                                <td colspan="8" style="text-align: center; color: #aaa; font-size: 0.85rem;">NO ACTIVE SIGNALS</td>
                             </tr>
                         `;
                     }
@@ -1334,10 +1159,10 @@
                 .catch((error) => {
                     console.error("Error loading signals: ", error);
                     const tbody = document.querySelector('#signalsTable tbody');
-                    tbody.innerHTML = `<tr><td colspan="8" style="color: #ff4d4d; text-align: center;">ERROR LOADING SIGNALS: ${error.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" style="color: #ff4d4d; text-align: center; font-size: 0.85rem;">ERROR: ${error.message}</td></tr>`;
                 });
         }
-        // UI helper functions
+        
         function showMessage(text, type = 'error') {
             const messageDiv = document.getElementById('keyMessage') || document.getElementById('message');
             if (!messageDiv) return;
@@ -1346,7 +1171,7 @@
             messageDiv.className = `message ${type}`;
             setTimeout(() => {
                 messageDiv.style.display = 'none';
-            }, 5000);
+            }, 3000);
         }
     </script>
 </body>
