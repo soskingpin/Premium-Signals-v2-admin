@@ -3,31 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberForex Signals | Admin Dashboard</title>
+    <title>William Capital Admin Panel</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap');
-
         :root {
-            --primary: #00f0ff;
-            --secondary: #ff00ff;
+            --primary: #1a549c;
+            --secondary: #464655;
             --dark: #0a0a15;
             --darker: #05050a;
-            --accent: #00ff00;
-            --danger: #ff0000;
-            --success: #00ff00;
+            --accent: #2a2a4a;
+            --danger: #ff4d4d;
+            --success: #2a882a;
             --text: #e0e0e0;
             --card-bg: #121220;
             --border-radius: 8px;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Exo 2', sans-serif;
         }
-
         body {
             background-color: var(--dark);
             color: var(--text);
@@ -35,7 +32,6 @@
             overflow-x: hidden;
             position: relative;
         }
-
         /* Background Elements */
         .background {
             position: fixed;
@@ -46,7 +42,6 @@
             z-index: -2;
             overflow: hidden;
         }
-
         #candlestick-canvas {
             position: fixed;
             top: 0;
@@ -56,7 +51,6 @@
             z-index: -1;
             opacity: 0.25;
         }
-
         /* Card and Layout Styles */
         .dashboard-container {
             display: none;
@@ -64,13 +58,11 @@
             margin: 20px auto;
             padding: 0 20px;
         }
-
         .main-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 20px;
         }
-
         header {
             background: linear-gradient(90deg, var(--darker) 0%, #0c0c20 100%);
             padding: 15px 20px;
@@ -79,13 +71,12 @@
             align-items: center;
             border-radius: var(--border-radius);
             margin: 0 20px 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 15px rgba(0, 240, 255, 0.2);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 15px rgba(26, 84, 156, 0.2);
+            border: 1px solid rgba(26, 84, 156, 0.3);
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
         }
-
         header::before {
             content: '';
             position: absolute;
@@ -93,25 +84,22 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm25-6c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%2300f0ff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background: url("image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm25-6c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%231a549c' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
             opacity: 0.2;
         }
-
         .logo {
-            color: var(--primary);
+            color: var(--secondary);
             font-size: 1.8rem;
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            text-shadow: 0 0 10px rgba(70, 70, 85, 0.5);
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 1px;
         }
-
         .status-indicators {
             display: flex;
             gap: 15px;
             align-items: center;
         }
-
         .status-indicator {
             padding: 5px 12px;
             border-radius: 20px;
@@ -120,13 +108,11 @@
             border: 1px solid var(--primary);
             text-transform: uppercase;
         }
-
         .status-indicator.active {
             color: var(--success);
             border-color: var(--success);
             box-shadow: 0 0 8px var(--success);
         }
-
         .logout-btn {
             background: linear-gradient(45deg, var(--danger), #c0392b);
             color: white;
@@ -134,132 +120,115 @@
             padding: 8px 15px;
             border-radius: var(--border-radius);
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);
             transition: all 0.3s ease;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
         .logout-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 7px 15px rgba(255, 0, 0, 0.4);
+            box-shadow: 0 7px 15px rgba(255, 77, 77, 0.4);
         }
-
         .card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(0, 240, 255, 0.1);
-            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 0 20px rgba(26, 84, 156, 0.1);
+            border: 1px solid rgba(26, 84, 156, 0.2);
             position: relative;
             overflow: hidden;
         }
-
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
-
         .card-header h2 {
-            color: var(--primary);
+            color: var(--secondary);
             font-size: 1.3rem;
             font-weight: 600;
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+            text-shadow: 0 0 5px rgba(70, 70, 85, 0.3);
             font-family: 'Orbitron', sans-serif;
         }
-
         .card-stats {
             display: flex;
             gap: 10px;
         }
-
         .stat {
             background: rgba(0, 0, 0, 0.4);
             padding: 3px 8px;
             border-radius: 15px;
             font-size: 0.8rem;
-            color: var(--primary);
+            color: var(--secondary);
         }
-
         h2 {
-            color: var(--primary);
+            color: var(--secondary);
             margin-top: 0;
             font-weight: 600;
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
+            text-shadow: 0 0 5px rgba(70, 70, 85, 0.2);
             font-family: 'Orbitron', sans-serif;
         }
-
         .key-generator, .signal-generator {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-
         .key-row, .signal-row {
             display: flex;
             gap: 10px;
             align-items: center;
         }
-
         input, select, button {
             padding: 12px;
             border-radius: var(--border-radius);
             font-family: 'Exo 2', sans-serif;
         }
-
         input, select {
             flex: 1;
             background: rgba(10, 10, 30, 0.5);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            border: 1px solid rgba(26, 84, 156, 0.3);
             color: white;
             transition: all 0.3s;
             font-size: 0.95rem;
         }
-
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(26, 84, 156, 0.2);
         }
-
-        /* Cyberpunk-styled inputs */
+        /* Professional inputs */
         .cyber-input {
             position: relative;
             background: rgba(10, 10, 30, 0.5);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            border: 1px solid rgba(26, 84, 156, 0.3);
             color: white;
             transition: all 0.3s;
         }
-
         .cyber-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(26, 84, 156, 0.2);
         }
-
         .cyber-select {
             position: relative;
             background: rgba(10, 10, 30, 0.5);
-            border: 1px solid rgba(0, 240, 255, 0.3);
+            border: 1px solid rgba(26, 84, 156, 0.3);
             color: white;
             transition: all 0.3s;
         }
-
         .cyber-select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(26, 84, 156, 0.2);
         }
-
         .cyber-button {
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: #0f0f1b;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(26, 84, 156, 0.3);
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -267,16 +236,13 @@
             position: relative;
             overflow: hidden;
         }
-
         .cyber-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 7px 15px rgba(0, 240, 255, 0.4);
+            box-shadow: 0 7px 15px rgba(26, 84, 156, 0.4);
         }
-
         .cyber-button:active {
             transform: translateY(0);
         }
-
         .cyber-button::before {
             content: '';
             position: absolute;
@@ -284,11 +250,10 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(42, 42, 74, 0.2) 0%, transparent 70%);
             z-index: -1;
             animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0% {
                 transform: scale(0.5);
@@ -303,7 +268,6 @@
                 opacity: 0;
             }
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -311,31 +275,26 @@
             border-radius: var(--border-radius);
             overflow: hidden;
         }
-
         th, td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid rgba(50, 50, 80, 0.5);
             border-right: 1px solid rgba(50, 50, 80, 0.5);
         }
-
         th:last-child, td:last-child {
             border-right: none;
         }
-
         th {
             background: rgba(15, 15, 35, 0.7);
-            color: var(--primary);
+            color: var(--secondary);
             font-weight: 600;
             text-transform: uppercase;
             font-size: 0.85rem;
             letter-spacing: 1px;
         }
-
         tr:hover {
-            background: rgba(0, 240, 255, 0.05);
+            background: rgba(26, 84, 156, 0.05);
         }
-
         .status {
             padding: 5px 10px;
             border-radius: 20px;
@@ -344,22 +303,18 @@
             text-transform: uppercase;
             font-weight: 500;
         }
-
         .status.active {
-            background: rgba(0, 255, 0, 0.2);
+            background: rgba(42, 136, 42, 0.2);
             color: var(--success);
         }
-
         .status.expired {
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(255, 77, 77, 0.2);
             color: var(--danger);
         }
-
         .status.revoked {
             background: rgba(108, 117, 125, 0.2);
             color: #6c757d;
         }
-
         .action-btn {
             background: none;
             border: none;
@@ -371,35 +326,41 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
         .action-btn:hover {
             color: var(--secondary);
             text-decoration: underline;
         }
-
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        .action-btn.delete:hover {
+            color: #ff6b6b;
+        }
+        .action-btn.edit {
+            color: #ffc107;
+        }
+        .action-btn.edit:hover {
+            color: #ffcc33;
+        }
         .key-help, .signal-help {
             font-size: 0.85rem;
             color: #aaa;
             margin-top: 5px;
         }
-
         .message {
             text-align: center;
             margin-top: 10px;
             padding: 8px;
             border-radius: 4px;
         }
-
         .message.success {
             color: var(--success);
-            background: rgba(0, 255, 0, 0.1);
+            background: rgba(42, 136, 42, 0.1);
         }
-
         .message.error {
             color: var(--danger);
-            background: rgba(255, 0, 0, 0.1);
+            background: rgba(255, 77, 77, 0.1);
         }
-
         .modal {
             display: none;
             position: fixed;
@@ -413,24 +374,21 @@
             align-items: center;
             animation: modalFadeIn 0.4s;
         }
-
         @keyframes modalFadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
         .modal-content {
             background: var(--card-bg);
             margin: 10% auto;
             padding: 25px;
             width: 550px;
             border-radius: var(--border-radius);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(26, 84, 156, 0.3);
+            box-shadow: 0 0 50px rgba(26, 84, 156, 0.2);
             position: relative;
             overflow: hidden;
         }
-
         .close {
             color: #aaa;
             float: right;
@@ -442,12 +400,10 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .close:hover {
             color: var(--primary);
             transform: scale(1.1);
         }
-
         /* Login Page Styles */
         .login-container {
             width: 100%;
@@ -455,38 +411,34 @@
             background: var(--card-bg);
             padding: 40px;
             border-radius: var(--border-radius);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 30px rgba(26, 84, 156, 0.2);
             margin: 50px auto;
-            border: 1px solid rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(26, 84, 156, 0.1);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         .login-header {
             text-align: center;
             margin-bottom: 30px;
         }
-
         .login-header h1 {
-            color: var(--primary);
+            color: var(--secondary);
             font-size: 2.5rem;
             font-weight: 700;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            text-shadow: 0 0 10px rgba(70, 70, 85, 0.5);
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 3px;
             margin-bottom: 5px;
         }
-
         .login-header .tagline {
-            color: var(--secondary);
+            color: var(--primary);
             font-size: 1.1rem;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-
         .login-container::before {
             content: '';
             position: absolute;
@@ -494,23 +446,20 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(26, 84, 156, 0.05) 0%, transparent 70%);
             z-index: -1;
             pointer-events: none;
         }
-
         .form-group {
             width: 100%;
             margin-bottom: 15px;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: var(--primary);
+            color: var(--secondary);
             font-weight: 500;
         }
-
         .error-message {
             color: var(--danger);
             text-align: center;
@@ -518,31 +467,25 @@
             font-size: 0.9rem;
             min-height: 20px;
         }
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
             .key-row, .signal-row {
                 flex-direction: column;
             }
-            
             .login-container {
                 margin: 20px 15px;
             }
         }
-
-        /* Glowing elements for cyberpunk look */
+        /* Glowing elements */
         .glow {
             text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
         }
-
         .glow-hover:hover {
             text-shadow: 0 0 8px var(--primary), 0 0 15px var(--primary);
         }
-
         /* Professional chart styles */
         .chart-grid {
             position: absolute;
@@ -550,20 +493,32 @@
             height: 100%;
             pointer-events: none;
         }
-
         .chart-grid-line {
             position: absolute;
-            background: rgba(78, 205, 196, 0.1);
+            background: rgba(42, 42, 74, 0.1);
         }
-
         .horizontal-grid {
             width: 100%;
             height: 1px;
         }
-
         .vertical-grid {
             height: 100%;
             width: 1px;
+        }
+        .contact-info {
+            text-align: center;
+            margin: 20px auto;
+            font-size: 0.9rem;
+            color: #a3a3c2;
+            max-width: 600px;
+        }
+        .contact-info a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -572,12 +527,11 @@
     <div class="background">
         <canvas id="candlestick-canvas"></canvas>
     </div>
-
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-header">
-            <h1>CYBERFOREX</h1>
-            <p class="tagline">ADMIN DASHBOARD</p>
+            <h1>WILLIAM CAPITAL</h1>
+            <p class="tagline">ADMIN PANEL</p>
         </div>
         <div class="form-group">
             <label for="username">ACCESS CODE</label>
@@ -588,19 +542,23 @@
             <input type="password" id="password" placeholder="••••••••" class="cyber-input">
         </div>
         <button onclick="loginAdmin()" class="cyber-button">LOG IN</button>
+        <div class="contact-info">
+            Support: <a href="mailto:eddingtonw056@gmail.com">eddingtonw056@gmail.com</a>
+        </div>
         <div id="message" class="error-message"></div>
     </div>
-
     <!-- Dashboard Page -->
     <div id="dashboardPage" class="dashboard-container">
         <header>
-            <div class="logo">CYBERFOREX ADMIN DASHBOARD</div>
+            <div class="logo">WILLIAM CAPITAL ADMIN PANEL</div>
             <div class="status-indicators">
                 <div class="status-indicator active">SECURE</div>
                 <button class="logout-btn" onclick="logout()">LOG OUT</button>
             </div>
         </header>
-        
+        <div class="contact-info">
+            Support: <a href="mailto:eddingtonw056@gmail.com">eddingtonw056@gmail.com</a> | WhatsApp: +263718517301
+        </div>
         <div class="main-content">
             <div class="card">
                 <div class="card-header">
@@ -623,6 +581,7 @@
                             <option value="5">5</option>
                             <option value="7" selected>7</option>
                             <option value="10">10</option>
+                            <option value="14">14</option>
                             <option value="15">15</option>
                             <option value="30">30</option>
                             <option value="60">60</option>
@@ -639,12 +598,11 @@
                         <button onclick="saveKey()" class="cyber-button">ACTIVATE KEY</button>
                     </div>
                     <div class="key-help">
-                        <p>TIP: For subscriptions, 30 days is common. For trials, 7 days works well.</p>
+                        <p>William Capital Plans: 7 Days ($10), 14 Days ($20), 30 Days ($30)</p>
                     </div>
                     <div id="keyMessage" class="message"></div>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-header">
                     <h2>ADD NEW SIGNAL</h2>
@@ -653,10 +611,9 @@
                     </button>
                 </div>
                 <div class="signal-help">
-                    <p>Use this form to add new forex signals for your users.</p>
+                    <p>Use this form to add new forex signals for William Capital users.</p>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-header">
                     <h2>LICENSE KEYS MANAGEMENT</h2>
@@ -680,7 +637,6 @@
                     </table>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-header">
                     <h2>ACTIVE SIGNALS</h2>
@@ -707,8 +663,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Signal Modal -->
+    <!-- Add Signal Modal -->
     <div id="signalModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeSignalModal()">&times;</span>
@@ -756,7 +711,57 @@
             </div>
         </div>
     </div>
-
+    <!-- Edit Signal Modal -->
+    <div id="editSignalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditSignalModal()">&times;</span>
+            <h2>EDIT SIGNAL</h2>
+            <input type="hidden" id="editSignalId">
+            <div class="signal-generator">
+                <div class="signal-row">
+                    <label>CURRENCY PAIR:</label>
+                    <input type="text" id="editSignalPair" class="cyber-input" placeholder="EUR/USD">
+                </div>
+                <div class="signal-row">
+                    <label>SIGNAL TYPE:</label>
+                    <select id="editSignalType" class="cyber-select">
+                        <option value="buy">BUY</option>
+                        <option value="sell">SELL</option>
+                    </select>
+                </div>
+                <div class="signal-row">
+                    <label>ENTRY PRICE:</label>
+                    <input type="text" id="editSignalEntry" class="cyber-input" placeholder="1.0850">
+                </div>
+                <div class="signal-row">
+                    <label>TAKE PROFIT:</label>
+                    <input type="text" id="editSignalTP" class="cyber-input" placeholder="1.0920">
+                </div>
+                <div class="signal-row">
+                    <label>STOP LOSS:</label>
+                    <input type="text" id="editSignalSL" class="cyber-input" placeholder="1.0810">
+                </div>
+                <div class="signal-row">
+                    <label>TIMEFRAME:</label>
+                    <select id="editSignalTimeframe" class="cyber-select">
+                        <option value="M5">M5</option>
+                        <option value="M15">M15</option>
+                        <option value="M30">M30</option>
+                        <option value="H1">H1</option>
+                        <option value="H4">H4</option>
+                        <option value="D1">D1</option>
+                    </select>
+                </div>
+                <div class="signal-row">
+                    <label>ADDITIONAL NOTE:</label>
+                    <input type="text" id="editSignalNote" class="cyber-input" placeholder="Optional note">
+                </div>
+                <button onclick="updateSignal()" class="cyber-button">UPDATE SIGNAL</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
         // Your Firebase config
         const firebaseConfig = {
@@ -768,45 +773,36 @@
             appId: "1:655334374318:web:d107dbf37ab1e31e1c663f",
             measurementId: "G-P7RWPEPQ4V"
         };
-
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
         // Check if admin is already logged in
         document.addEventListener('DOMContentLoaded', function() {
             // Create candlestick background
             initCandlestickChart();
-            
             // Check login status
             if (localStorage.getItem('forex_admin') === 'true') {
                 showDashboard();
             }
         });
-
         // Candlestick chart background
         function initCandlestickChart() {
             const canvas = document.getElementById('candlestick-canvas');
             const ctx = canvas.getContext('2d');
-            
             // Set canvas size
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             }
-            
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
-            
             // Candlestick data generator
             let candlesticks = [];
             const candleCount = 300;
             const timeframe = 60; // 60 minutes of data
-            
             function generateCandlesticks() {
                 candlesticks = [];
                 let lastClose = 100;
-                
                 for (let i = 0; i < candleCount; i++) {
                     const x = (i / candleCount) * canvas.width;
                     const volatility = 2 + Math.random() * 3;
@@ -816,26 +812,22 @@
                     const close = open + change;
                     const high = Math.max(open, close) + (Math.random() * volatility);
                     const low = Math.min(open, close) - (Math.random() * volatility);
-                    
                     candlesticks.push({
                         x,
                         open,
                         close,
                         high,
                         low,
-                        color: open > close ? '#ff0000' : '#00ff00',
+                        color: open > close ? '#ff4d4d' : '#2a882a',
                         timestamp: new Date(Date.now() - (candleCount - i) * timeframe * 60 * 1000)
                     });
-                    
                     lastClose = close;
                 }
             }
-            
             // Draw grid lines
             function drawGrid() {
                 ctx.strokeStyle = 'rgba(50, 50, 100, 0.3)';
                 ctx.lineWidth = 0.5;
-                
                 // Horizontal lines (5 major grid lines)
                 for (let i = 0; i < 6; i++) {
                     const y = (i / 5) * canvas.height;
@@ -844,7 +836,6 @@
                     ctx.lineTo(canvas.width, y);
                     ctx.stroke();
                 }
-                
                 // Vertical lines (10 major grid lines)
                 for (let i = 0; i < 11; i++) {
                     const x = (i / 10) * canvas.width;
@@ -854,32 +845,26 @@
                     ctx.stroke();
                 }
             }
-            
             // Draw candlesticks
             function drawCandlesticks() {
                 // Calculate price range
                 let minPrice = Infinity;
                 let maxPrice = -Infinity;
-                
                 candlesticks.forEach(candle => {
                     minPrice = Math.min(minPrice, candle.low);
                     maxPrice = Math.max(maxPrice, candle.high);
                 });
-                
                 const priceRange = maxPrice - minPrice;
-                
                 // Draw each candlestick
                 candlesticks.forEach(candle => {
                     // Map price to canvas coordinates
                     const mapPrice = price => {
                         return canvas.height - ((price - minPrice) / priceRange) * canvas.height;
                     };
-                    
                     const openY = mapPrice(candle.open);
                     const closeY = mapPrice(candle.close);
                     const highY = mapPrice(candle.high);
                     const lowY = mapPrice(candle.low);
-                    
                     // Draw wick
                     ctx.strokeStyle = candle.color;
                     ctx.lineWidth = 1;
@@ -887,12 +872,10 @@
                     ctx.moveTo(candle.x, highY);
                     ctx.lineTo(candle.x, lowY);
                     ctx.stroke();
-                    
                     // Draw body
                     ctx.fillStyle = candle.color;
                     const bodyHeight = Math.abs(closeY - openY);
                     const bodyY = Math.min(openY, closeY);
-                    
                     // Only draw body if there's height
                     if (bodyHeight > 0) {
                         ctx.fillRect(
@@ -904,13 +887,11 @@
                     }
                 });
             }
-            
             // Draw time labels
             function drawTimeLabels() {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                 ctx.font = '10px Arial';
                 ctx.textAlign = 'center';
-                
                 // Draw labels for last 5 hours
                 for (let i = 0; i < 5; i++) {
                     const x = canvas.width - (i * (canvas.width / 5));
@@ -919,25 +900,20 @@
                     ctx.fillText(timeStr, x, canvas.height - 10);
                 }
             }
-            
             // Draw price labels
             function drawPriceLabels() {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
                 ctx.font = '10px Arial';
                 ctx.textAlign = 'right';
-                
                 // Calculate price range
                 let minPrice = Infinity;
                 let maxPrice = -Infinity;
-                
                 candlesticks.forEach(candle => {
                     minPrice = Math.min(minPrice, candle.low);
                     maxPrice = Math.max(maxPrice, candle.high);
                 });
-                
                 const priceRange = maxPrice - minPrice;
                 const priceStep = priceRange / 5;
-                
                 // Draw price labels
                 for (let i = 0; i <= 5; i++) {
                     const price = minPrice + (i * priceStep);
@@ -945,21 +921,16 @@
                     ctx.fillText(price.toFixed(2), canvas.width - 10, y - 5);
                 }
             }
-            
             // Animate candlesticks
             function animateCandlesticks() {
                 // Clear canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
                 // Draw grid
                 drawGrid();
-                
                 // Draw price labels
                 drawPriceLabels();
-                
                 // Draw time labels
                 drawTimeLabels();
-                
                 // Update candlesticks
                 candlesticks.forEach((candle, index) => {
                     // Simulate new data
@@ -970,13 +941,11 @@
                         candle.high = Math.max(candle.high, candle.close);
                         candle.low = Math.min(candle.low, candle.close);
                     }
-                    
                     // Move candles from right to left
                     candle.x += 0.05;
                     if (candle.x > canvas.width) {
                         // Remove old candle
                         candlesticks.shift();
-                        
                         // Add new candle
                         const lastCandle = candlesticks[candlesticks.length - 1];
                         const volatility = 2 + Math.random() * 3;
@@ -986,34 +955,28 @@
                         const close = open + change;
                         const high = Math.max(open, close) + (Math.random() * volatility);
                         const low = Math.min(open, close) - (Math.random() * volatility);
-                        
                         candlesticks.push({
                             x: 0,
                             open,
                             close,
                             high,
                             low,
-                            color: open > close ? '#ff0000' : '#00ff00',
+                            color: open > close ? '#ff4d4d' : '#2a882a',
                             timestamp: new Date()
                         });
                     }
                 });
-                
                 // Draw candlesticks
                 drawCandlesticks();
-                
                 requestAnimationFrame(animateCandlesticks);
             }
-            
             generateCandlesticks();
             animateCandlesticks();
         }
-
         // Login and auth functions
         function loginAdmin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
             if (username === 'admin' && password === 'admin###') {
                 localStorage.setItem('forex_admin', 'true');
                 showDashboard();
@@ -1021,25 +984,20 @@
                 showMessage('INVALID CREDENTIALS', 'error');
             }
         }
-
         function showDashboard() {
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
-            
             // Add glowing effect to dashboard
             document.body.classList.add('dashboard-active');
-            
             // Load data
             loadRecentKeys();
             loadSignals();
         }
-
         function logout() {
             localStorage.removeItem('forex_admin');
             document.getElementById('dashboardPage').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
         }
-
         // Key generation and management
         function generateKey() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -1051,12 +1009,10 @@
             document.getElementById('newKey').value = key;
             showMessage('KEY GENERATED! SELECT DURATION AND CLICK "ACTIVATE KEY"', 'success');
         }
-
         function saveKey() {
             const keyInput = document.getElementById('newKey').value;
             const durationValue = parseInt(document.getElementById('durationValue').value);
             const durationUnit = document.getElementById('durationUnit').value;
-            
             if (!keyInput) {
                 showMessage('GENERATE A KEY FIRST', 'error');
                 return;
@@ -1065,12 +1021,10 @@
                 showMessage('PLEASE SELECT A VALID DURATION', 'error');
                 return;
             }
-            
             const formattedKey = keyInput.replace(/[^A-Z0-9]/gi, '')
                 .replace(/(.{4})/g, '$1-')
                 .slice(0, 19)
                 .toUpperCase();
-            
             // Calculate expiration date based on selected duration
             const now = new Date();
             let expiresAt = new Date(now);
@@ -1094,7 +1048,6 @@
                     expiresAt.setMonth(now.getMonth() + durationValue);
                     break;
             }
-            
             // Save to Firestore
             db.collection('licenseKeys').add({
                 key: formattedKey,
@@ -1115,7 +1068,6 @@
                 showMessage('ERROR SAVING KEY: ' + error.message, 'error');
             });
         }
-
         function revokeKey(keyId) {
             if (!confirm('ARE YOU SURE YOU WANT TO REVOKE THIS LICENSE KEY?')) {
                 return;
@@ -1133,7 +1085,6 @@
                 showMessage('ERROR REVOKING KEY: ' + error.message, 'error');
             });
         }
-
         function loadRecentKeys() {
             db.collection('licenseKeys')
                 .orderBy('createdAt', 'desc')
@@ -1144,7 +1095,6 @@
                     // Get only the last 3 active keys
                     const activeKeys = [];
                     let activeCount = 0;
-                    
                     querySnapshot.forEach((doc) => {
                         const data = doc.data();
                         if (data.status === 'active') {
@@ -1152,10 +1102,8 @@
                             activeCount++;
                         }
                     });
-                    
                     // Update active keys count
                     document.getElementById('activeKeysCount').textContent = activeCount;
-                    
                     // Take only the last 3
                     const recentKeys = activeKeys.slice(0, 3);
                     recentKeys.forEach(item => {
@@ -1163,7 +1111,6 @@
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
                         let expiresAt = 'N/A';
                         let statusClass = 'status ' + data.status;
-                        
                         if (data.expiresAt) {
                             const expiresDate = data.expiresAt.toDate();
                             expiresAt = expiresDate.toLocaleString();
@@ -1172,7 +1119,6 @@
                                 statusClass = 'status expired';
                             }
                         }
-                        
                         const row = `
                             <tr>
                                 <td>${data.key}</td>
@@ -1186,7 +1132,6 @@
                         `;
                         tbody.innerHTML += row;
                     });
-                    
                     // If no active keys, show message
                     if (recentKeys.length === 0) {
                         tbody.innerHTML = `
@@ -1199,15 +1144,13 @@
                 .catch((error) => {
                     console.error("Error loading keys: ", error);
                     const tbody = document.querySelector('#keysTable tbody');
-                    tbody.innerHTML = `<tr><td colspan="5" style="color: #ff6b6b; text-align: center;">ERROR LOADING KEYS: ${error.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" style="color: #ff4d4d; text-align: center;">ERROR LOADING KEYS: ${error.message}</td></tr>`;
                 });
         }
-
         // Signal management functions
         function openSignalModal() {
             document.getElementById('signalModal').style.display = 'flex';
         }
-
         function closeSignalModal() {
             document.getElementById('signalModal').style.display = 'none';
             // Clear form
@@ -1217,7 +1160,6 @@
             document.getElementById('signalSL').value = '';
             document.getElementById('signalNote').value = '';
         }
-
         function saveSignal() {
             const pair = document.getElementById('signalPair').value.trim();
             const type = document.getElementById('signalType').value;
@@ -1226,12 +1168,10 @@
             const sl = document.getElementById('signalSL').value.trim();
             const timeframe = document.getElementById('signalTimeframe').value;
             const note = document.getElementById('signalNote').value.trim();
-            
             if (!pair || !entry || !tp || !sl) {
                 showMessage('PLEASE FILL IN ALL REQUIRED FIELDS (PAIR, ENTRY, TP, SL)', 'error');
                 return;
             }
-            
             db.collection('signals').add({
                 pair: pair,
                 type: type,
@@ -1254,7 +1194,75 @@
                 showMessage('ERROR ADDING SIGNAL: ' + error.message, 'error');
             });
         }
-
+        function editSignal(signalId) {
+            db.collection('signals').doc(signalId).get().then(doc => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('editSignalId').value = signalId;
+                    document.getElementById('editSignalPair').value = data.pair;
+                    document.getElementById('editSignalType').value = data.type;
+                    document.getElementById('editSignalEntry').value = data.entry;
+                    document.getElementById('editSignalTP').value = data.tp;
+                    document.getElementById('editSignalSL').value = data.sl;
+                    document.getElementById('editSignalTimeframe').value = data.timeframe;
+                    document.getElementById('editSignalNote').value = data.note || '';
+                    document.getElementById('editSignalModal').style.display = 'flex';
+                }
+            });
+        }
+        function closeEditSignalModal() {
+            document.getElementById('editSignalModal').style.display = 'none';
+        }
+        function updateSignal() {
+            const signalId = document.getElementById('editSignalId').value;
+            const pair = document.getElementById('editSignalPair').value.trim();
+            const type = document.getElementById('editSignalType').value;
+            const entry = document.getElementById('editSignalEntry').value.trim();
+            const tp = document.getElementById('editSignalTP').value.trim();
+            const sl = document.getElementById('editSignalSL').value.trim();
+            const timeframe = document.getElementById('editSignalTimeframe').value;
+            const note = document.getElementById('editSignalNote').value.trim();
+            
+            if (!pair || !entry || !tp || !sl) {
+                showMessage('PLEASE FILL IN ALL REQUIRED FIELDS (PAIR, ENTRY, TP, SL)', 'error');
+                return;
+            }
+            
+            db.collection('signals').doc(signalId).update({
+                pair: pair,
+                type: type,
+                entry: entry,
+                tp: tp,
+                sl: sl,
+                timeframe: timeframe,
+                note: note,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                closeEditSignalModal();
+                loadSignals();
+                showMessage('SIGNAL UPDATED SUCCESSFULLY!', 'success');
+            })
+            .catch((error) => {
+                console.error("Error updating signal: ", error);
+                showMessage('ERROR UPDATING SIGNAL: ' + error.message, 'error');
+            });
+        }
+        function deleteSignal(signalId) {
+            if (!confirm('ARE YOU SURE YOU WANT TO DELETE THIS SIGNAL? THIS ACTION CANNOT BE UNDONE.')) {
+                return;
+            }
+            
+            db.collection('signals').doc(signalId).delete()
+            .then(() => {
+                loadSignals();
+                showMessage('SIGNAL DELETED SUCCESSFULLY!', 'success');
+            })
+            .catch((error) => {
+                console.error("Error deleting signal: ", error);
+                showMessage('ERROR DELETING SIGNAL: ' + error.message, 'error');
+            });
+        }
         function deactivateSignal(signalId) {
             if (!confirm('ARE YOU SURE YOU WANT TO DEACTIVATE THIS SIGNAL?')) {
                 return;
@@ -1272,7 +1280,6 @@
                 showMessage('ERROR DEACTIVATING SIGNAL: ' + error.message, 'error');
             });
         }
-
         function loadSignals() {
             db.collection('signals')
                 .get()
@@ -1282,7 +1289,6 @@
                     // Filter and sort client-side (no index needed)
                     const activeSignals = [];
                     let activeCount = 0;
-                    
                     querySnapshot.forEach(doc => {
                         const data = doc.data();
                         if (data.status === 'active') {
@@ -1290,15 +1296,12 @@
                             activeCount++;
                         }
                     });
-                    
                     // Update active signals count
                     document.getElementById('activeSignalsCount').textContent = activeCount;
-                    
                     // Sort by createdAt
                     activeSignals.sort((a, b) => {
                         return b.createdAt.seconds - a.createdAt.seconds;
                     });
-                    
                     activeSignals.forEach(data => {
                         const createdAt = data.createdAt?.toDate().toLocaleString() || 'N/A';
                         const row = `
@@ -1311,13 +1314,14 @@
                                 <td>${data.timeframe}</td>
                                 <td>${createdAt}</td>
                                 <td>
+                                    <button class="action-btn edit" onclick="editSignal('${data.id}')">EDIT</button>
+                                    <button class="action-btn delete" onclick="deleteSignal('${data.id}')">DELETE</button>
                                     <button class="action-btn" onclick="deactivateSignal('${data.id}')">DEACTIVATE</button>
                                 </td>
                             </tr>
                         `;
                         tbody.innerHTML += row;
                     });
-                    
                     // If no signals, show message
                     if (activeSignals.length === 0) {
                         tbody.innerHTML = `
@@ -1330,19 +1334,16 @@
                 .catch((error) => {
                     console.error("Error loading signals: ", error);
                     const tbody = document.querySelector('#signalsTable tbody');
-                    tbody.innerHTML = `<tr><td colspan="8" style="color: #ff6b6b; text-align: center;">ERROR LOADING SIGNALS: ${error.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" style="color: #ff4d4d; text-align: center;">ERROR LOADING SIGNALS: ${error.message}</td></tr>`;
                 });
         }
-
         // UI helper functions
         function showMessage(text, type = 'error') {
             const messageDiv = document.getElementById('keyMessage') || document.getElementById('message');
             if (!messageDiv) return;
-            
             messageDiv.textContent = text;
             messageDiv.style.display = 'block';
             messageDiv.className = `message ${type}`;
-            
             setTimeout(() => {
                 messageDiv.style.display = 'none';
             }, 5000);
